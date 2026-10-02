@@ -67,7 +67,7 @@ if kind == "경제지표":
     embed_html(cal.week_html(week_start, items, is_dark(), 720, "예정된 발표 없음"), height=725)
     st.caption(
         f"시간은 한국 시간(KST) 기준입니다. 왼쪽에 노란 선이 있는 항목은 주요 지표입니다. "
-        "출처 Yahoo Finance"
+        f"출처 {econ['source'].iloc[0] if not econ.empty else '-'}"
     )
 
 # ---------------------------------------------------------------- 실적발표
@@ -95,5 +95,6 @@ else:
     embed_html(cal.week_html(week_start, items, is_dark(), 720, "예정된 발표 없음"), height=725)
     st.caption(
         "날짜는 미국 동부 시간 기준입니다. '장 마감 후' 발표는 한국 시간으로 다음 날 아침입니다. "
-        "종목을 클릭하면 새 탭에서 종목 분석이 열립니다. 출처 Yahoo Finance"
+        "종목을 클릭하면 새 탭에서 종목 분석이 열립니다. "
+        f"출처 {earn['source'].iloc[0] if not earn.empty else '-'}"
     )

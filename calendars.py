@@ -125,11 +125,13 @@ def economic_items(df: pd.DataFrame) -> dict:
     if df.empty:
         return out
     df = df.assign(local=df["time"].dt.tz_convert(KST)).sort_values("local")
+    df = df.astype(object).where(df.notna(), None)
     for r in df.itertuples():
         d = r.local.date()
-        tm = r.local.strftime("%H:%M")
+        tm = "시간 미정" if getattr(r, "tbd", None) == True else r.local.strftime("%H:%M")
         period = f" ({_h.escape(str(r.period))})" if isinstance(r.period, str) and r.period else ""
-        actual = "" if pd.isna(r.actual) else f" | 발표 <b>{_fmt(r.actual)}</b>"
+        actual = "" if r.actual is None or (isinstance(r.actual, float) and pd.isna(r.actual)) \
+            else f" | 발표 <b>{_fmt(r.actual)}</b>"
         cls = "it major" if is_major(r.event) else "it"
         out.setdefault(d, []).append(
             f'<div class="{cls}"><div class="tm">{tm} {flag(r.region)} {_h.escape(REGION_NAMES.get(str(r.region).upper(), str(r.region)))}</div>'

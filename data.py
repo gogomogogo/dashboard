@@ -196,21 +196,145 @@ def get_history(ticker: str, interval: str = "1d") -> pd.DataFrame:
     return df[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
 
 
+NASDAQ_HEADERS = {
+    **UA,
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Origin": "https://www.nasdaq.com",
+    "Referer": "https://www.nasdaq.com/",
+}
+
+
+def _nasdaq(path: str, params: dict | None = None) -> dict:
+    r = requests.get(f"https://api.nasdaq.com/api/{path}", params=params,
+                     headers=NASDAQ_HEADERS, timeout=12)
+    r.raise_for_status()
+    js = r.json()
+    return js.get("data") or {}
+
+
+def _num(v):
+    """'$1,234.5', '(0.12)', '0.44%', '3.2T' 같은 문자열을 숫자로. 실패하면 None."""
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return None if pd.isna(v) else float(v)
+    s = str(v).replace("&nbsp;", "").replace("$", "").replace(",", "").replace("%", "").strip()
+    neg = s.startswith("(") and s.endswith(")")
+    s = s.strip("()")
+    mult = {"T": 1e12, "B": 1e9, "M": 1e6, "K": 1e3}.get(s[-1:].upper(), 1) if s else 1
+    if mult != 1:
+        s = s[:-1]
+    try:
+        x = float(s) * mult
+    except ValueError:
+        return None
+    return -x if neg else x
+
+
+def _clean(v):
+    """경제지표 값처럼 단위가 붙은 문자열은 그대로 두고 빈 값만 None으로."""
+    if v is None:
+        return None
+    s = str(v).replace("&nbsp;", "").strip()
+    return s if s and s.upper() not in ("N/A", "NA", "-", "--") else None
+
+
+def _nasdaq_info(ticker: str) -> dict:
+    """Nasdaq 종목 요약 → yfinance info와 같은 키 이름으로 변환."""
+    for assetclass in ("stocks", "etf"):
+        try:
+            d = _nasdaq(f"quote/{ticker}/summary", {"assetclass": assetclass})
+        except Exception:
+            continue
+        sd = d.get("summaryData") or {}
+        if not sd:
+            continue
+        val = lambda k: (sd.get(k) or {}).get("value")
+        out = {
+            "marketCap": _num(val("MarketCap")),
+            "trailingPE": _num(val("PERatio")),
+            "forwardPE": _num(val("ForwardPE1Yr")),
+            "trailingEps": _num(val("EarningsPerShare")),
+            "dividendRate": _num(val("AnnualizedDividend")),
+            "beta": _num(val("Beta")),
+            "sector": _clean(val("Sector")),
+            "industry": _clean(val("Industry")),
+            "targetMeanPrice": _num(val("OneYrTarget")),
+        }
+        hl = _clean(val("FiftTwoWeekHighLow")) or _clean(val("FiftyTwoWeekHighLow"))
+        if hl and "/" in hl:
+            hi, lo = hl.split("/", 1)
+            out["fiftyTwoWeekHigh"], out["fiftyTwoWeekLow"] = _num(hi), _num(lo)
+        y = _num(val("Yield"))
+        if y is not None:
+            out["_dividendYieldPct"] = y
+        return {k: v for k, v in out.items() if v is not None}
+    return {}
+
+
 @st.cache_data(ttl=3600, show_spinner=False)
 def get_info(ticker: str) -> dict:
+    """기본 지표. Yahoo를 먼저 시도하고, 비어 있는 값은 Nasdaq과 fast_info로 채운다.
+    (Streamlit Cloud 같은 서버에서는 Yahoo가 'Invalid Crumb'으로 막히는 경우가 많다.)"""
+    info, sources = {}, []
     try:
-        return yf.Ticker(ticker).info or {}
+        info = dict(yf.Ticker(ticker).info or {})
+        if info.get("marketCap") or info.get("trailingPE"):
+            sources.append("Yahoo Finance")
     except Exception:
-        return {}
+        info = {}
+
+    needed = ["marketCap", "trailingPE", "forwardPE", "trailingEps", "dividendRate",
+              "beta", "sector", "industry", "fiftyTwoWeekHigh", "fiftyTwoWeekLow", "targetMeanPrice"]
+    if any(info.get(k) in (None, "") for k in needed):
+        nd = _nasdaq_info(ticker)
+        if nd:
+            sources.append("Nasdaq")
+            for k, v in nd.items():
+                if info.get(k) in (None, ""):
+                    info[k] = v
+
+    if info.get("marketCap") is None or info.get("fiftyTwoWeekHigh") is None:
+        try:
+            fi = yf.Ticker(ticker).fast_info
+            for k, attr in (("marketCap", "market_cap"), ("fiftyTwoWeekHigh", "year_high"),
+                            ("fiftyTwoWeekLow", "year_low"), ("currentPrice", "last_price")):
+                if info.get(k) is None:
+                    info[k] = getattr(fi, attr, None)
+            sources.append("Yahoo 시세")
+        except Exception:
+            pass
+    info["_sources"] = sources
+    return info
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
-def get_news(ticker: str, count: int = 10) -> list:
-    """yfinance 뉴스를 {title, url, source, time} 형태로 정리. 신·구 응답 형식 모두 처리."""
-    try:
-        raw = yf.Ticker(ticker).get_news(count=count)
-    except Exception:
-        return []
+def _rss(url: str, source_default: str = "") -> list:
+    import xml.etree.ElementTree as ET
+    r = requests.get(url, headers=UA, timeout=12)
+    r.raise_for_status()
+    root = ET.fromstring(r.content)
+    items = []
+    for it in root.iter("item"):
+        title = (it.findtext("title") or "").strip()
+        if not title:
+            continue
+        src = (it.findtext("source") or source_default).strip()
+        # Google 뉴스 제목은 '헤드라인 - 매체' 형식
+        if src and title.endswith(f" - {src}"):
+            title = title[: -len(src) - 3]
+        pub = it.findtext("pubDate")
+        items.append({
+            "title": title,
+            "url": (it.findtext("link") or "").strip(),
+            "source": src,
+            "time": pd.to_datetime(pub, utc=True, errors="coerce") if pub else None,
+        })
+    return items
+
+
+def _yf_news(ticker: str, count: int) -> list:
+    raw = yf.Ticker(ticker).get_news(count=count)
     items = []
     for n in raw or []:
         c = n.get("content", n)
@@ -229,6 +353,26 @@ def get_news(ticker: str, count: int = 10) -> list:
             ts = None
         items.append({"title": title, "url": url, "source": source, "time": ts})
     return items
+
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def get_news(ticker: str, count: int = 10) -> list:
+    """최근 뉴스. yfinance → Yahoo RSS → Google 뉴스 RSS 순서로 시도."""
+    attempts = [
+        lambda: _yf_news(ticker, count),
+        lambda: _rss(f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={ticker}&region=US&lang=en-US",
+                     "Yahoo Finance"),
+        lambda: _rss(f"https://news.google.com/rss/search?q={ticker}+stock&hl=en-US&gl=US&ceid=US:en"),
+    ]
+    for fetch in attempts:
+        try:
+            items = fetch()
+        except Exception:
+            continue
+        if items:
+            items.sort(key=lambda n: n["time"] or pd.Timestamp(0, tz="UTC"), reverse=True)
+            return items[:count]
+    return []
 
 
 # ---------------------------------------------------------------- 캘린더
@@ -253,9 +397,59 @@ def _to_utc(series: pd.Series) -> pd.Series:
     return s.dt.tz_convert("UTC")
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
-def get_economic_calendar(start: str, end: str) -> pd.DataFrame:
-    """주요국 경제지표 발표 일정. 열: event, region, time(UTC), period, actual, expected, last"""
+NASDAQ_COUNTRY = {
+    "United States": "US", "Euro Zone": "EU", "Eurozone": "EU", "European Union": "EU",
+    "Japan": "JP", "China": "CN", "United Kingdom": "GB", "Germany": "DE", "France": "FR",
+    "Italy": "IT", "Spain": "ES", "South Korea": "KR", "Korea": "KR", "Canada": "CA",
+    "Australia": "AU", "New Zealand": "NZ", "Switzerland": "CH", "India": "IN", "Brazil": "BR",
+    "Mexico": "MX", "Singapore": "SG", "Hong Kong": "HK", "Taiwan": "TW", "Sweden": "SE",
+    "Norway": "NO", "South Africa": "ZA", "Turkey": "TR", "Russia": "RU", "Indonesia": "ID",
+}
+
+
+def _days(start: str, end: str) -> list:
+    return [d.date() for d in pd.date_range(start, end, freq="D")]
+
+
+def _per_day(fetch_day, start: str, end: str) -> pd.DataFrame:
+    """Nasdaq 캘린더는 하루 단위라 기간의 날짜별로 병렬 조회."""
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        results = list(ex.map(fetch_day, _days(start, end)))
+    errors = [r for r in results if isinstance(r, Exception)]
+    frames = [r for r in results if isinstance(r, pd.DataFrame) and not r.empty]
+    if not frames and errors and len(errors) == len(results):
+        raise errors[0]
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def _nasdaq_econ_day(d) -> pd.DataFrame:
+    try:
+        rows = (_nasdaq("calendar/economicevents", {"date": d.isoformat()}).get("rows")) or []
+    except Exception as e:
+        return e
+    out = []
+    for r in rows:
+        country = _clean(r.get("country")) or ""
+        gmt = _clean(r.get("gmt")) or _clean(r.get("time")) or ""
+        hhmm = gmt.replace("GMT", "").strip()
+        tbd = not (len(hhmm) == 5 and hhmm[2] == ":")
+        if tbd:
+            # 시간 미정이면 한국 날짜 기준 0시로 두어 날짜가 밀리지 않게 한다
+            t = pd.Timestamp(d).tz_localize("Asia/Seoul").tz_convert("UTC")
+        else:
+            t = pd.Timestamp(f"{d} {hhmm}").tz_localize("UTC")
+        out.append({
+            "event": _clean(r.get("eventName")) or "",
+            "region": NASDAQ_COUNTRY.get(country, country),
+            "time": t, "tbd": tbd, "period": None,
+            "actual": _clean(r.get("actual")),
+            "expected": _clean(r.get("consensus")),
+            "last": _clean(r.get("previous")),
+        })
+    return pd.DataFrame(out)
+
+
+def _yahoo_econ(start: str, end: str) -> pd.DataFrame:
     cal = yf.Calendars(start=start, end=end)
     df = _paged(lambda off: cal.get_economic_events_calendar(
         start=start, end=end, limit=100, offset=off, force=True))
@@ -266,15 +460,59 @@ def get_economic_calendar(start: str, end: str) -> pd.DataFrame:
         "Actual": "actual", "Expected": "expected", "Last": "last", "Revised": "revised",
     })
     df["time"] = _to_utc(df["time"])
-    for col in ("period", "actual", "expected", "last"):
-        if col not in df:
-            df[col] = None
-    return df.dropna(subset=["time"]).drop_duplicates(subset=["event", "region", "time"])
+    df["tbd"] = False
+    return df
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def get_earnings_calendar(start: str, end: str, min_cap: float) -> pd.DataFrame:
-    """미국 실적발표 일정. 열: ticker, company, cap, time(UTC), timing, eps_est, eps_act, surprise"""
+def get_economic_calendar(start: str, end: str) -> pd.DataFrame:
+    """주요국 경제지표 발표 일정. Yahoo → Nasdaq 순서로 시도.
+    열: event, region, time(UTC), tbd, period, actual, expected, last, source"""
+    errors = []
+    for name, fetch in (("Yahoo Finance", _yahoo_econ),
+                        ("Nasdaq", lambda s_, e_: _per_day(_nasdaq_econ_day, s_, e_))):
+        try:
+            df = fetch(start, end)
+        except Exception as e:
+            errors.append(f"{name}: {e}")
+            continue
+        if df.empty:
+            continue
+        for col in ("period", "actual", "expected", "last", "tbd"):
+            if col not in df:
+                df[col] = None
+        df["source"] = name
+        return df.dropna(subset=["time"]).drop_duplicates(subset=["event", "region", "time"])
+    if errors:
+        raise RuntimeError(" / ".join(errors))
+    return pd.DataFrame()
+
+
+NASDAQ_TIMING = {"time-pre-market": "BMO", "time-after-hours": "AMC"}
+
+
+def _nasdaq_earn_day(d) -> pd.DataFrame:
+    try:
+        rows = (_nasdaq("calendar/earnings", {"date": d.isoformat()}).get("rows")) or []
+    except Exception as e:
+        return e
+    noon_ny = pd.Timestamp(f"{d} 12:00").tz_localize("America/New_York").tz_convert("UTC")
+    out = []
+    for r in rows:
+        out.append({
+            "ticker": _clean(r.get("symbol")),
+            "company": _clean(r.get("name")),
+            "cap": _num(r.get("marketCap")),
+            "time": noon_ny,
+            "timing": NASDAQ_TIMING.get(str(r.get("time")), "TNS"),
+            "eps_est": _num(r.get("epsForecast")),
+            "eps_act": _num(r.get("eps")),
+            "surprise": _num(r.get("surprise")),
+        })
+    return pd.DataFrame(out)
+
+
+def _yahoo_earn(start: str, end: str, min_cap: float) -> pd.DataFrame:
     cal = yf.Calendars(start=start, end=end)
     df = _paged(lambda off: cal.get_earnings_calendar(
         market_cap=min_cap, filter_most_active=False, start=start, end=end,
@@ -287,7 +525,30 @@ def get_earnings_calendar(start: str, end: str, min_cap: float) -> pd.DataFrame:
         "Reported EPS": "eps_act", "Surprise(%)": "surprise",
     })
     df["time"] = _to_utc(df["time"])
-    for col in ("timing", "eps_est", "eps_act", "surprise", "cap", "company"):
-        if col not in df:
-            df[col] = None
-    return df.dropna(subset=["time"]).drop_duplicates(subset=["ticker", "time"])
+    return df
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_earnings_calendar(start: str, end: str, min_cap: float) -> pd.DataFrame:
+    """미국 실적발표 일정. Yahoo → Nasdaq 순서로 시도.
+    열: ticker, company, cap, time(UTC), timing, eps_est, eps_act, surprise, source"""
+    errors = []
+    for name, fetch in (("Yahoo Finance", lambda s_, e_: _yahoo_earn(s_, e_, min_cap)),
+                        ("Nasdaq", lambda s_, e_: _per_day(_nasdaq_earn_day, s_, e_))):
+        try:
+            df = fetch(start, end)
+        except Exception as e:
+            errors.append(f"{name}: {e}")
+            continue
+        if df.empty:
+            continue
+        for col in ("timing", "eps_est", "eps_act", "surprise", "cap", "company"):
+            if col not in df:
+                df[col] = None
+        df = df.dropna(subset=["time", "ticker"])
+        df = df[pd.to_numeric(df["cap"], errors="coerce").fillna(0) >= min_cap]
+        df["source"] = name
+        return df.drop_duplicates(subset=["ticker", "time"])
+    if errors:
+        raise RuntimeError(" / ".join(errors))
+    return pd.DataFrame()

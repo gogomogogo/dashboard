@@ -112,10 +112,10 @@ def num(v, fmt="{:,.2f}"):
 
 price = info.get("currentPrice") or info.get("regularMarketPrice") or last
 div_rate = info.get("dividendRate") or info.get("trailingAnnualDividendRate")
-div_yield = (div_rate / price * 100) if div_rate and price else None
+div_yield = (div_rate / price * 100) if div_rate and price else info.get("_dividendYieldPct")
 
 st.subheader("기본 지표")
-if not info:
+if not any(info.get(k) for k in ("marketCap", "trailingPE", "sector")):
     st.info("이 종목은 기본 지표를 제공하지 않습니다. ETF나 지수는 일부 값이 비어 있을 수 있습니다.")
 row1 = st.columns(6)
 row1[0].metric("시가총액", money(info.get("marketCap")))
@@ -131,6 +131,8 @@ row2[2].metric("52주 최고", num(info.get("fiftyTwoWeekHigh"), "${:,.2f}"))
 row2[3].metric("52주 최저", num(info.get("fiftyTwoWeekLow"), "${:,.2f}"))
 row2[4].metric("PBR", num(info.get("priceToBook")))
 row2[5].metric("목표주가 (평균)", num(info.get("targetMeanPrice"), "${:,.2f}"))
+if info.get("_sources"):
+    st.caption("출처 " + ", ".join(info["_sources"]))
 
 # ---------------------------------------------------------------- 뉴스
 st.subheader("최근 뉴스")
