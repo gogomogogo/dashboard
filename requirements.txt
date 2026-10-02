@@ -1,4 +1,6 @@
-streamlit
-yfinance
-pandas
-altair
+streamlit>=1.50
+yfinance>=0.2.54
+plotly>=5.20
+pandas>=2.0
+requests
+lxml
