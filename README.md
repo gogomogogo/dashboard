@@ -14,7 +14,7 @@ streamlit run app.py
 
 ## 파일 구성
 - `app.py` 진입점과 페이지 메뉴
-- `views/` 페이지별 화면 (overview, stock, calendar)
+- `views/` 페이지별 화면 (market_overview, stock_analysis, event_calendar)
 - `data.py` 데이터 수집과 캐싱
 - `charts.py` 선 차트, 캔들 차트, 로고 히트맵
 - `calendars.py` 캘린더 HTML
