@@ -181,3 +181,113 @@ def get_fear_greed():
         hist = live if hist is None else live.combine_first(hist)
     s = hist.sort_index()
     return s[~s.index.duplicated(keep="last")], rating
+
+
+# ---------------------------------------------------------------- 종목 분석
+@st.cache_data(ttl=900, show_spinner=False)
+def get_history(ticker: str, interval: str = "1d") -> pd.DataFrame:
+    """OHLCV. 일봉은 10년, 주봉·월봉은 전체 기간."""
+    period = "10y" if interval == "1d" else "max"
+    df = yf.Ticker(ticker).history(period=period, interval=interval, auto_adjust=False)
+    if df.empty:
+        return df
+    df.index = _naive(df.index)
+    df = df[~df.index.duplicated(keep="last")]
+    return df[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_info(ticker: str) -> dict:
+    try:
+        return yf.Ticker(ticker).info or {}
+    except Exception:
+        return {}
+
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def get_news(ticker: str, count: int = 10) -> list:
+    """yfinance 뉴스를 {title, url, source, time} 형태로 정리. 신·구 응답 형식 모두 처리."""
+    try:
+        raw = yf.Ticker(ticker).get_news(count=count)
+    except Exception:
+        return []
+    items = []
+    for n in raw or []:
+        c = n.get("content", n)
+        title = c.get("title")
+        if not title:
+            continue
+        url = (c.get("canonicalUrl") or {}).get("url") or (c.get("clickThroughUrl") or {}).get("url") \
+            or c.get("link")
+        source = (c.get("provider") or {}).get("displayName") or c.get("publisher", "")
+        t = c.get("pubDate") or c.get("displayTime")
+        if t:
+            ts = pd.to_datetime(t, utc=True)
+        elif c.get("providerPublishTime"):
+            ts = pd.to_datetime(c["providerPublishTime"], unit="s", utc=True)
+        else:
+            ts = None
+        items.append({"title": title, "url": url, "source": source, "time": ts})
+    return items
+
+
+# ---------------------------------------------------------------- 캘린더
+def _paged(fetch, max_rows: int = 2000) -> pd.DataFrame:
+    """Yahoo 캘린더는 한 번에 100건까지라 offset으로 나눠 받는다."""
+    frames, offset = [], 0
+    while offset < max_rows:
+        df = fetch(offset)
+        if df is None or df.empty:
+            break
+        frames.append(df.reset_index())
+        if len(df) < 100:
+            break
+        offset += 100
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def _to_utc(series: pd.Series) -> pd.Series:
+    s = pd.to_datetime(series, errors="coerce")
+    if s.dt.tz is None:
+        s = s.dt.tz_localize("UTC")
+    return s.dt.tz_convert("UTC")
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_economic_calendar(start: str, end: str) -> pd.DataFrame:
+    """주요국 경제지표 발표 일정. 열: event, region, time(UTC), period, actual, expected, last"""
+    cal = yf.Calendars(start=start, end=end)
+    df = _paged(lambda off: cal.get_economic_events_calendar(
+        start=start, end=end, limit=100, offset=off, force=True))
+    if df.empty:
+        return df
+    df = df.rename(columns={
+        "Event": "event", "Region": "region", "Event Time": "time", "For": "period",
+        "Actual": "actual", "Expected": "expected", "Last": "last", "Revised": "revised",
+    })
+    df["time"] = _to_utc(df["time"])
+    for col in ("period", "actual", "expected", "last"):
+        if col not in df:
+            df[col] = None
+    return df.dropna(subset=["time"]).drop_duplicates(subset=["event", "region", "time"])
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_earnings_calendar(start: str, end: str, min_cap: float) -> pd.DataFrame:
+    """미국 실적발표 일정. 열: ticker, company, cap, time(UTC), timing, eps_est, eps_act, surprise"""
+    cal = yf.Calendars(start=start, end=end)
+    df = _paged(lambda off: cal.get_earnings_calendar(
+        market_cap=min_cap, filter_most_active=False, start=start, end=end,
+        limit=100, offset=off, force=True))
+    if df.empty:
+        return df
+    df = df.rename(columns={
+        "Symbol": "ticker", "Company": "company", "Marketcap": "cap",
+        "Event Start Date": "time", "Timing": "timing", "EPS Estimate": "eps_est",
+        "Reported EPS": "eps_act", "Surprise(%)": "surprise",
+    })
+    df["time"] = _to_utc(df["time"])
+    for col in ("timing", "eps_est", "eps_act", "surprise", "cap", "company"):
+        if col not in df:
+            df[col] = None
+    return df.dropna(subset=["time"]).drop_duplicates(subset=["ticker", "time"])

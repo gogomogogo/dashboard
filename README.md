@@ -2,18 +2,27 @@
 
 ## 실행
 ```bash
-pip install -r requirements.txt
+pip install -U -r requirements.txt
 streamlit run app.py
 ```
-브라우저에서 http://localhost:8501 이 열립니다.
+브라우저에서 http://localhost:8501 이 열립니다. 상단 메뉴로 페이지를 전환합니다.
+
+## 페이지
+- 시장 개요: S&P 500 히트맵, 10년물 금리, 공포와 탐욕 지수, 원/달러 환율, VIX
+- 종목 분석: 티커 검색, 캔들 차트(거래량, 이동평균선, 볼린저밴드, RSI, MACD), 기본 지표, 뉴스
+- 캘린더: 주요국 경제지표 발표 일정, 미국 실적발표 일정 (주 단위)
 
 ## 파일 구성
-- `app.py` 화면 구성 (사이드바, 히트맵, 지표 패널)
+- `app.py` 진입점과 페이지 메뉴
+- `views/` 페이지별 화면 (overview, stock, calendar)
 - `data.py` 데이터 수집과 캐싱
-- `charts.py` 히트맵(트리맵)과 스크롤 줌 선 차트
+- `charts.py` 선 차트, 캔들 차트, 로고 히트맵
+- `calendars.py` 캘린더 HTML
+- `indicators.py` 기술적 지표 계산
+- `common.py` 공통 도우미
 
 ## 데이터 출처
-- S&P 500 구성종목: 위키피디아 / 시세·시가총액: Yahoo Finance (yfinance)
+- S&P 500 구성종목: 위키피디아
+- 시세, 시가총액, 기업 정보, 뉴스, 경제지표·실적 캘린더: Yahoo Finance (yfinance)
 - 10년물 국채금리: FRED DGS10 (실패 시 Yahoo ^TNX)
-- 공포와 탐욕 지수: CNN 비공식 엔드포인트
-- 원/달러 환율 KRW=X, VIX ^VIX: Yahoo Finance
+- 공포와 탐욕 지수: 공개 과거 데이터(GitHub) + CNN
