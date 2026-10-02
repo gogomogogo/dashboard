@@ -6,6 +6,7 @@ import streamlit as st
 
 import charts
 import data
+import news
 from common import embed_html
 
 VIEWS = ["원본", "1차 미분", "2차 미분"]
@@ -18,6 +19,8 @@ with st.sidebar:
         format_func={"1D": "1일", "1W": "1주", "1M": "1개월", "YTD": "연초 대비"}.get,
         horizontal=True,
     )
+    news_hours = st.radio("주요 이슈 범위", [12, 24, 48], index=1, horizontal=True,
+                          format_func=lambda h: f"{h}시간")
     window = st.number_input("미분용 이동평균 기간 (거래일)", 5, 250, 30, step=5)
     smooth = st.number_input(
         "2차 미분 추가 평활화 (거래일, 0 = 끔)", 0, 60, 0, step=5,
@@ -109,6 +112,64 @@ try:
     st.caption(note)
 except Exception as e:
     st.error(f"히트맵 데이터를 불러오지 못했습니다: {e}")
+
+
+# ---------------------------------------------------------------- 주요 이슈
+def _md(text: str) -> str:
+    """마크다운에서 깨지는 문자 정리 ($는 수식, []는 링크로 해석됨)."""
+    return str(text).replace("$", "\\$").replace("[", "(").replace("]", ")")
+
+
+def _ago(ts) -> str:
+    mins = int((pd.Timestamp.now(tz="UTC") - ts).total_seconds() // 60)
+    if mins < 60:
+        return f"{max(mins, 1)}분 전"
+    if mins < 60 * 24:
+        return f"{mins // 60}시간 전"
+    return f"{mins // 1440}일 전"
+
+
+def issue_card(rank: int, it: dict):
+    with st.container(border=True):
+        st.markdown(f"**{rank}. [{_md(it['title_ko'])}]({it['url']})**")
+        if it["title_ko"] != it["title"]:
+            st.caption(_md(it["title"]))
+        badges = " ".join(f":blue-badge[{o}]" for o in it["outlets"])
+        stocks = " ".join(f"[{t}](/stock?ticker={t})" for t in it["stocks"])
+        meta = f"{badges} &nbsp; :gray[{len(it['outlets'])}개 매체 · 첫 보도 {_ago(it['first'])}]"
+        if stocks:
+            meta += f" &nbsp; {stocks}"
+        st.markdown(meta)
+        if len(it["articles"]) > 1:
+            with st.expander(f"매체별 기사 {len(it['articles'])}건"):
+                for a in it["articles"]:
+                    line = f":gray-badge[{a['outlet']}] [{_md(a['title_ko'])}]({a['url']})"
+                    sub = _md(a["title"]) if a["title_ko"] != a["title"] else ""
+                    st.markdown(f"{line}  \n:gray[{sub}{' · ' if sub else ''}{_ago(a['time'])}]")
+
+
+st.subheader("주요 이슈")
+try:
+    with st.spinner("주요 매체 헤드라인을 모아 이슈별로 정리하는 중"):
+        try:
+            cons_n = data.get_sp500_constituents()
+            caps_n = data.get_market_caps(tuple(cons_n["ticker"]))
+        except Exception:
+            cons_n, caps_n = pd.DataFrame({"ticker": [], "name": []}), pd.Series(dtype=float)
+        issues, engine, n_articles, n_outlets = news.top_issues(cons_n, caps_n, hours=news_hours)
+    if not issues:
+        st.info("가져온 헤드라인이 없습니다. 잠시 후 '데이터 새로고침'을 눌러 보세요.")
+    else:
+        cols = st.columns(2)
+        for i, it in enumerate(issues):
+            with cols[i % 2]:
+                issue_card(i + 1, it)
+        note = (f"최근 {news_hours}시간 동안 {n_outlets}개 매체의 헤드라인 {n_articles}건을 이슈별로 묶어, "
+                "보도한 매체 수·시장 영향·최신성 순으로 정렬했습니다.")
+        note += f" 번역: {engine}." if engine else " 번역 서비스에 연결하지 못해 원문으로 표시합니다."
+        st.caption(note)
+except Exception as e:
+    st.error(f"주요 이슈를 불러오지 못했습니다: {e}")
 
 st.subheader("시장 지표")
 c1, c2 = st.columns(2)
