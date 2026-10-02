@@ -130,22 +130,54 @@ def get_usdkrw() -> pd.Series:
     return _yf_series("KRW=X")
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
-def get_fear_greed():
-    """CNN 공포와 탐욕 지수. 비공식 엔드포인트라 CNN이 바꾸면 깨질 수 있음."""
-    url = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata/2018-01-01"
+FG_HISTORY_CSV = (
+    "https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/fear-greed.csv"
+)
+CNN_FG_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
+
+
+def _cnn_fear_greed():
+    """CNN 엔드포인트. 너무 오래된 시작일을 넣으면 500 에러가 나므로 날짜 없이 먼저 시도."""
     headers = {
         **UA,
         "Accept": "application/json",
         "Referer": "https://edition.cnn.com/",
         "Origin": "https://edition.cnn.com",
     }
-    r = requests.get(url, headers=headers, timeout=20)
-    r.raise_for_status()
-    js = r.json()
-    points = js["fear_and_greed_historical"]["data"]
-    s = pd.Series(
-        {pd.to_datetime(p["x"], unit="ms").normalize(): float(p["y"]) for p in points}
-    ).sort_index()
-    rating = js.get("fear_and_greed", {}).get("rating", "")
-    return s, rating
+    recent = (pd.Timestamp.today() - pd.Timedelta(days=300)).strftime("%Y-%m-%d")
+    for url in (CNN_FG_URL, f"{CNN_FG_URL}/{recent}"):
+        try:
+            r = requests.get(url, headers=headers, timeout=15)
+            r.raise_for_status()
+            js = r.json()
+            points = js["fear_and_greed_historical"]["data"]
+            s = pd.Series(
+                {pd.to_datetime(p["x"], unit="ms").normalize(): float(p["y"]) for p in points}
+            ).sort_index()
+            return s, js.get("fear_and_greed", {}).get("rating", "")
+        except Exception:
+            continue
+    return None, ""
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_fear_greed():
+    """공포와 탐욕 지수.
+    과거 데이터(2011~)는 매일 갱신되는 공개 CSV에서, 최신값은 CNN에서 받아 합친다.
+    둘 중 하나만 성공해도 표시된다."""
+    hist, rating = None, ""
+    try:
+        df = pd.read_csv(io.StringIO(requests.get(FG_HISTORY_CSV, timeout=20).text))
+        hist = pd.Series(df.iloc[:, 1].astype(float).values, index=pd.to_datetime(df.iloc[:, 0]))
+        rating = str(df.iloc[-1, 2])
+    except Exception:
+        pass
+
+    live, live_rating = _cnn_fear_greed()
+    if hist is None and live is None:
+        raise RuntimeError("CNN과 과거 데이터 CSV 모두에서 데이터를 받지 못했습니다.")
+    if live is not None:
+        rating = live_rating or rating
+        hist = live if hist is None else live.combine_first(hist)
+    s = hist.sort_index()
+    return s[~s.index.duplicated(keep="last")], rating

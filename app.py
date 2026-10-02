@@ -117,13 +117,8 @@ try:
         ret=cons["ticker"].map(rets),
     )
     missing = hm[["market_cap", "ret"]].isna().any(axis=1).sum()
-    st.plotly_chart(
-        charts.sp500_treemap(hm, period),
-        width="stretch",
-        theme=None,
-        config={"displaylogo": False},
-    )
-    note = "박스 크기는 시가총액, 색은 등락률입니다. 섹터를 클릭하면 확대됩니다."
+    embed_html(charts.heatmap_html(hm, period, height=760), height=765)
+    note = "박스 크기는 시가총액, 색은 등락률입니다. 종목에 마우스를 올리면 상세 정보가 보입니다."
     if missing:
         note += f" 데이터를 받지 못한 {missing}개 종목은 제외했습니다."
     st.caption(note)
