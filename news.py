@@ -39,6 +39,7 @@ OUTLETS = {
     "Yahoo Finance": ["https://finance.yahoo.com/news/rssindex"],
 }
 PRIORITY = {name: i for i, name in enumerate(OUTLETS)}
+FEED_TIMEOUT = 5  # 이보다 느린 피드는 이번 회차에서 건너뛴다
 
 # 특정 사건이 아닌 정기 요약·생활 정보성 기사 (점수 감점)
 ROUNDUP = re.compile(
@@ -51,7 +52,7 @@ ROUNDUP = re.compile(
 
 def _fetch_feed(outlet: str, url: str) -> list:
     try:
-        r = requests.get(url, headers=UA, timeout=12)
+        r = requests.get(url, headers=UA, timeout=FEED_TIMEOUT)
         r.raise_for_status()
         root = ET.fromstring(r.content)
     except Exception:
@@ -80,7 +81,7 @@ def _fetch_feed(outlet: str, url: str) -> list:
 @st.cache_data(ttl=900, show_spinner=False)
 def fetch_headlines(hours: int = 24) -> pd.DataFrame:
     jobs = [(o, u) for o, urls in OUTLETS.items() for u in urls]
-    with ThreadPoolExecutor(max_workers=8) as ex:
+    with ThreadPoolExecutor(max_workers=len(jobs)) as ex:
         results = ex.map(lambda j: _fetch_feed(*j), jobs)
     df = pd.DataFrame([a for r in results for a in r])
     if df.empty:
@@ -329,60 +330,99 @@ def _translate_google_chunk(lines: list) -> list:
     return out
 
 
-def _translate_google(texts: list) -> list:
+def _chunks(texts: list, limit: int = 1500) -> list:
     out, chunk, size = [], [], 0
     for t in texts:
-        if chunk and size + len(t) > 1500:
-            out += _translate_google_chunk(chunk)
+        if chunk and size + len(t) > limit:
+            out.append(chunk)
             chunk, size = [], 0
         chunk.append(t)
         size += len(t) + 1
     if chunk:
-        out += _translate_google_chunk(chunk)
+        out.append(chunk)
     return out
 
 
-@st.cache_data(ttl=86400, show_spinner=False)
-def translate(texts: tuple):
-    """영→한 번역. Claude API 키가 있으면 Claude, 없으면 Google 번역. 실패하면 원문 그대로."""
-    texts = list(texts)
-    if not texts:
-        return [], None
-    key = _anthropic_key()
-    if key:
-        try:
-            return _translate_claude(texts, key), "Claude"
-        except Exception:
-            pass
+def _google_chunk_safe(chunk: list) -> dict:
+    """묶음 번역. 줄 수가 어긋나면 그 묶음만 한 줄씩 병렬로 다시 번역. 실패한 줄은 빠진다."""
     try:
-        return _translate_google(texts), "Google 번역"
+        return dict(zip(chunk, _translate_google_chunk(chunk)))
     except Exception:
-        pass
-    # 묶음 요청이 실패하면 한 줄씩 다시 시도
-    out, ok = [], False
-    for t in texts:
-        try:
-            out.append(_translate_google_chunk([t])[0])
-            ok = True
-        except Exception:
-            out.append(t)
-    return out, ("Google 번역" if ok else None)
+        if len(chunk) == 1:
+            return {}
+    with ThreadPoolExecutor(max_workers=min(8, len(chunk))) as ex:
+        parts = ex.map(_google_chunk_safe, [[t] for t in chunk])
+    return {k: v for d in parts for k, v in d.items()}
+
+
+def _translate_google(texts: list) -> dict:
+    chunks = _chunks(texts)
+    if not chunks:
+        return {}
+    with ThreadPoolExecutor(max_workers=min(6, len(chunks))) as ex:
+        parts = ex.map(_google_chunk_safe, chunks)
+    return {k: v for d in parts for k, v in d.items()}
+
+
+@st.cache_resource
+def _translation_store() -> dict:
+    """헤드라인 한 건 단위 번역 저장소 (앱 전체가 공유). 이미 번역한 문장은 다시 요청하지 않는다."""
+    return {"ko": {}, "engine": None}
+
+
+def translate(texts: tuple):
+    """영→한 번역. 새로 들어온 헤드라인만 번역하고 나머지는 저장소에서 꺼낸다.
+    Claude API 키가 있으면 Claude, 없으면 Google 번역. 실패한 문장은 원문 그대로."""
+    store = _translation_store()
+    ko = store["ko"]
+    missing = [t for t in dict.fromkeys(texts) if t not in ko]
+    if missing:
+        new, engine = {}, None
+        key = _anthropic_key()
+        if key:
+            try:
+                new = dict(zip(missing, _translate_claude(missing, key)))
+                engine = "Claude"
+            except Exception:
+                new = {}
+        if len(new) < len(missing):
+            rest = [t for t in missing if t not in new]
+            got = _translate_google(rest)
+            if got:
+                new.update(got)
+                engine = engine or "Google 번역"
+        ko.update(new)
+        if engine:
+            store["engine"] = engine
+        # 저장소가 너무 커지지 않게 오래된 것부터 정리
+        if len(ko) > 5000:
+            for k in list(ko)[: len(ko) - 4000]:
+                ko.pop(k, None)
+    out = [ko.get(t, t) for t in texts]
+    engine = store["engine"] if any(t in ko for t in texts) else None
+    return out, engine
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def _ranked(cons: pd.DataFrame, caps: pd.Series, hours: int, top_n: int):
+    """수집 + 묶기·순위 (15분 캐싱). 화면의 다른 버튼을 눌러도 다시 계산하지 않는다."""
+    df = fetch_headlines(hours)
+    n_outlets = df["outlet"].nunique() if not df.empty else 0
+    return cluster_and_rank(df, cons, caps, top_n), len(df), n_outlets
 
 
 def top_issues(cons: pd.DataFrame, caps: pd.Series, hours: int = 24, top_n: int = 8):
-    """수집 → 묶기·순위 → 번역까지 끝낸 결과."""
-    df = fetch_headlines(hours)
-    issues = cluster_and_rank(df, cons, caps, top_n)
+    """수집 → 묶기·순위 → 번역까지 끝낸 결과.
+    번역은 캐시 밖에서 하므로 한 번 실패해도 다음 새로고침 때 다시 시도된다."""
+    issues, n_articles, n_outlets = _ranked(cons, caps, hours, top_n)
     texts = []
     for it in issues:
         texts.append(it["title"])
         texts += [a["title"] for a in it["articles"]]
-    uniq = list(dict.fromkeys(texts))
-    translated, engine = translate(tuple(uniq))
-    ko = dict(zip(uniq, translated))
+    translated, engine = translate(tuple(texts))
+    ko = dict(zip(texts, translated))
     for it in issues:
         it["title_ko"] = ko.get(it["title"], it["title"])
         for a in it["articles"]:
             a["title_ko"] = ko.get(a["title"], a["title"])
-    n_outlets = df["outlet"].nunique() if not df.empty else 0
-    return issues, engine, len(df), n_outlets
+    return issues, engine, n_articles, n_outlets

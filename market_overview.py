@@ -149,27 +149,7 @@ def issue_card(rank: int, it: dict):
 
 
 st.subheader("주요 이슈")
-try:
-    with st.spinner("주요 매체 헤드라인을 모아 이슈별로 정리하는 중"):
-        try:
-            cons_n = data.get_sp500_constituents()
-            caps_n = data.get_market_caps(tuple(cons_n["ticker"]))
-        except Exception:
-            cons_n, caps_n = pd.DataFrame({"ticker": [], "name": []}), pd.Series(dtype=float)
-        issues, engine, n_articles, n_outlets = news.top_issues(cons_n, caps_n, hours=news_hours)
-    if not issues:
-        st.info("가져온 헤드라인이 없습니다. 잠시 후 '데이터 새로고침'을 눌러 보세요.")
-    else:
-        cols = st.columns(2)
-        for i, it in enumerate(issues):
-            with cols[i % 2]:
-                issue_card(i + 1, it)
-        note = (f"최근 {news_hours}시간 동안 {n_outlets}개 매체의 헤드라인 {n_articles}건을 이슈별로 묶어, "
-                "보도한 매체 수·시장 영향·최신성 순으로 정렬했습니다.")
-        note += f" 번역: {engine}." if engine else " 번역 서비스에 연결하지 못해 원문으로 표시합니다."
-        st.caption(note)
-except Exception as e:
-    st.error(f"주요 이슈를 불러오지 못했습니다: {e}")
+issues_slot = st.container()  # 자리만 먼저 잡고, 지표 차트를 그린 뒤 맨 마지막에 채운다
 
 st.subheader("시장 지표")
 c1, c2 = st.columns(2)
@@ -192,3 +172,27 @@ with c4:
     indicator_panel(
         "vix", "VIX", lambda: (data.get_vix(), "Yahoo ^VIX"), "#e5604d", decimals=2,
     )
+
+# ---------------------------------------------------------------- 주요 이슈 채우기
+with issues_slot:
+    try:
+        with st.spinner("주요 매체 헤드라인을 모아 이슈별로 정리하는 중"):
+            try:
+                cons_n = data.get_sp500_constituents()
+                caps_n = data.get_market_caps(tuple(cons_n["ticker"]))
+            except Exception:
+                cons_n, caps_n = pd.DataFrame({"ticker": [], "name": []}), pd.Series(dtype=float)
+            issues, engine, n_articles, n_outlets = news.top_issues(cons_n, caps_n, hours=news_hours)
+        if not issues:
+            st.info("가져온 헤드라인이 없습니다. 잠시 후 '데이터 새로고침'을 눌러 보세요.")
+        else:
+            cols = st.columns(2)
+            for i, it in enumerate(issues):
+                with cols[i % 2]:
+                    issue_card(i + 1, it)
+            note = (f"최근 {news_hours}시간 동안 {n_outlets}개 매체의 헤드라인 {n_articles}건을 이슈별로 묶어, "
+                    "보도한 매체 수·시장 영향·최신성 순으로 정렬했습니다.")
+            note += f" 번역: {engine}." if engine else " 번역 서비스에 연결하지 못해 원문으로 표시합니다."
+            st.caption(note)
+    except Exception as e:
+        st.error(f"주요 이슈를 불러오지 못했습니다: {e}")
