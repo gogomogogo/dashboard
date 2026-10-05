@@ -420,3 +420,69 @@ def heatmap_html(df: pd.DataFrame, period: str, height: int = 760) -> str:
         .replace("__RANGE__", str(COLOR_RANGE.get(period, 3)))
         .replace("__HEIGHT__", str(height))
     )
+
+
+# ---------------------------------------------------------------- 섹터 흐름
+SECTOR_COLORS = {
+    "XLK": "#3f7be0", "XLC": "#9b7fe6", "XLY": "#e5604d", "XLF": "#1e8e4e", "XLV": "#5cc9a7",
+    "XLI": "#e0a43a", "XLE": "#8d6e4f", "XLB": "#d17fb5", "XLP": "#7a9cc6", "XLU": "#b5b84a",
+    "XLRE": "#c98b5e",
+}
+
+
+def sector_chart(pct: pd.DataFrame, names: dict, n_lead: int = 3, height: int = 460) -> go.Figure:
+    """기준일 0% 대비 섹터 ETF 등락률을 겹쳐 그린다. 상위 n_lead개(주도 섹터)는 굵고 진하게."""
+    last = pct.iloc[-1].dropna().sort_values(ascending=False)
+    leaders = set(last.index[:n_lead])
+    x = pct.index.strftime("%Y-%m-%d").tolist()
+    fig = go.Figure()
+
+    # 주도 섹터를 마지막에 그려 다른 선 위에 오게 하고, 호버 목록은 등락률 순서로
+    order = [t for t in last.index if t not in leaders][::-1] + [t for t in last.index if t in leaders][::-1]
+    for t in order:
+        lead = t in leaders
+        label = f"{names.get(t, t)}({t})"
+        fig.add_trace(go.Scatter(
+            x=x, y=[round(float(v), 2) for v in pct[t].values], mode="lines", name=label,
+            line=dict(color=SECTOR_COLORS.get(t, TEXT), width=3.2 if lead else 1.4),
+            opacity=1.0 if lead else 0.45,
+            hovertemplate=f"{label} %{{y:+.2f}}%<extra></extra>",
+            legendrank=list(last.index).index(t),
+        ))
+
+    # 선 끝 라벨: 겹치지 않게 위아래로 벌려서 배치
+    span = max(1e-6, float(pct.max().max() - pct.min().min()))
+    gap = span * 0.055
+    ys = []
+    for t in last.index:  # 위에서부터
+        y = float(last[t])
+        if ys and ys[-1][1] - y < gap:
+            y = ys[-1][1] - gap
+        ys.append((t, y))
+    for t, y in ys:
+        lead = t in leaders
+        fig.add_annotation(
+            x=x[-1], y=y, xanchor="left", yanchor="middle", showarrow=False, xshift=6,
+            text=f"{'<b>' if lead else ''}{names.get(t, t)}({t}) {last[t]:+.1f}%{'</b>' if lead else ''}",
+            font=dict(size=12 if lead else 11, color=SECTOR_COLORS.get(t, TEXT)),
+            opacity=1.0 if lead else 0.75,
+        )
+
+    lo = min(float(pct.min().min()), min(y for _, y in ys))
+    hi = max(float(pct.max().max()), max(y for _, y in ys))
+    pad = (hi - lo) * 0.05 or 1
+    fig.add_hline(y=0, line=dict(color=TEXT, width=1, dash="dot"))
+    fig.update_layout(
+        height=height,
+        margin=dict(l=52, r=215, t=10, b=8),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color=TEXT, size=11),
+        showlegend=False,
+        hovermode="x unified",
+        xaxis=dict(gridcolor=GRID, showspikes=True, spikemode="across", spikethickness=1, spikecolor=TEXT,
+                   range=[x[0], x[-1]], fixedrange=True),
+        yaxis=dict(gridcolor=GRID, ticksuffix="%", zeroline=False, side="left", range=[lo - pad, hi + pad],
+                   fixedrange=True),
+    )
+    return fig

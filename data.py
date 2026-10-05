@@ -552,3 +552,31 @@ def get_earnings_calendar(start: str, end: str, min_cap: float) -> pd.DataFrame:
     if errors:
         raise RuntimeError(" / ".join(errors))
     return pd.DataFrame()
+
+
+# ---------------------------------------------------------------- 섹터 ETF
+SECTOR_ETFS = {
+    "XLE": "에너지", "XLB": "소재", "XLI": "산업재", "XLY": "경기소비재", "XLP": "필수소비재",
+    "XLV": "헬스케어", "XLF": "금융", "XLK": "정보기술", "XLC": "커뮤니케이션 서비스",
+    "XLU": "유틸리티", "XLRE": "부동산",
+}
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def get_sector_closes() -> pd.DataFrame:
+    """11개 섹터 ETF의 최근 6개월 일별 종가 (열 = 티커)."""
+    df = yf.download(list(SECTOR_ETFS), period="6mo", interval="1d",
+                     auto_adjust=True, progress=False, threads=True)
+    close = df["Close"] if isinstance(df.columns, pd.MultiIndex) else df[["Close"]]
+    close.index = _naive(close.index)
+    return close.dropna(how="all").ffill()
+
+
+def sector_returns(close: pd.DataFrame, months: float = 1) -> pd.DataFrame:
+    """기준일(오늘로부터 months개월 전 마지막 거래일) 종가를 0%로 한 누적 등락률(%)."""
+    end = close.index[-1]
+    start = end - (pd.DateOffset(weeks=1) if months < 1 else pd.DateOffset(months=int(months)))
+    base_idx = close.index[close.index <= start]
+    base_day = base_idx[-1] if len(base_idx) else close.index[0]
+    window = close.loc[base_day:]
+    return (window / window.iloc[0] - 1) * 100

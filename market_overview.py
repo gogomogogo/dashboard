@@ -114,6 +114,35 @@ except Exception as e:
     st.error(f"히트맵 데이터를 불러오지 못했습니다: {e}")
 
 
+# ---------------------------------------------------------------- 섹터 흐름
+st.subheader("섹터 흐름")
+try:
+    sec_close = data.get_sector_closes()
+    h1, h2 = st.columns([3, 1], vertical_alignment="center")
+    h1.caption("기준일 종가를 0%로 놓고 각 섹터 ETF가 얼마나 움직였는지 비교합니다. 굵은 선이 상위 3개 주도 섹터입니다.")
+    span = h2.segmented_control("기간", ["1주", "1개월", "3개월"], default="1개월",
+                                key="sector_span", label_visibility="collapsed") or "1개월"
+    months = {"1주": 0.25, "1개월": 1, "3개월": 3}[span]
+    pct = data.sector_returns(sec_close, months)
+
+    g, r = st.columns([3.2, 1])
+    with g:
+        st.plotly_chart(charts.sector_chart(pct, data.SECTOR_ETFS), width="stretch", theme=None,
+                        config={"displaylogo": False, "displayModeBar": False})
+    with r:
+        last = pct.iloc[-1].sort_values(ascending=False)
+        lines = []
+        for i, (t, v) in enumerate(last.items(), 1):
+            color = "green" if v >= 0 else "red"
+            name = f"{data.SECTOR_ETFS[t]}({t})"
+            name = f"**{name}**" if i <= 3 else name
+            lines.append(f"{i}. {name} &nbsp; :{color}[{v:+.2f}%]")
+        st.markdown("  \n".join(lines))
+        spread = last.iloc[0] - last.iloc[-1]
+        st.caption(f"기준일 {pct.index[0]:%Y-%m-%d} · 1위와 꼴찌 차이 {spread:.1f}%p")
+except Exception as e:
+    st.error(f"섹터 데이터를 불러오지 못했습니다: {e}")
+
 # ---------------------------------------------------------------- 주요 이슈
 def _md(text: str) -> str:
     """마크다운에서 깨지는 문자 정리 ($는 수식, []는 링크로 해석됨)."""
