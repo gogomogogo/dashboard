@@ -1,20 +1,20 @@
 {
- "updated": "2026-10-02 19:49 KST",
+ "updated": "2026-10-05 18:02 KST",
  "1w": {
-  "start": "2026-09-25",
-  "end": "2026-10-01",
+  "start": "2026-09-26",
+  "end": "2026-10-02",
   "rows": [
    {
     "rank": 1,
-    "isin": "US02079K3059",
+    "isin": "US88160R1014",
     "isins": [
-     "US02079K3059"
+     "US88160R1014"
     ],
-    "name": "ALPHABET INC CL A",
-    "buy": 102185285,
-    "sell": 19486315,
-    "net": 82698969,
-    "ticker": "GOOGL"
+    "name": "TESLA INC",
+    "buy": 98673402.0,
+    "sell": 39396384.0,
+    "net": 59277018.0,
+    "ticker": "TSLA"
    },
    {
     "rank": 2,
@@ -23,34 +23,35 @@
      "US80004C2008"
     ],
     "name": "SNDSK CRP ORD WI",
-    "buy": 82373011,
-    "sell": 22928657,
-    "net": 59444353,
+    "buy": 71089263.0,
+    "sell": 16884505.0,
+    "net": 54204758.0,
     "ticker": "SNDK"
    },
    {
     "rank": 3,
+    "isin": "US25461A3876",
+    "isins": [
+     "US25459Y5208",
+     "US25461A3876"
+    ],
+    "name": "DIREXION SHARES ETF TRUST DAILY MSCI SOUTH KOREA BULL",
+    "buy": 76144976.0,
+    "sell": 28285272.0,
+    "net": 47859704.0,
+    "ticker": "KORU"
+   },
+   {
+    "rank": 4,
     "isin": "US30303M1027",
     "isins": [
      "US30303M1027"
     ],
     "name": "META PLATFORMS INC CL A",
-    "buy": 89999940,
-    "sell": 30827933,
-    "net": 59172007,
+    "buy": 79652198.0,
+    "sell": 34918812.0,
+    "net": 44733386.0,
     "ticker": "META"
-   },
-   {
-    "rank": 4,
-    "isin": "US84615Q1031",
-    "isins": [
-     "US84615Q1031"
-    ],
-    "name": "SPACE EXPLORATION TECHN-CL A",
-    "buy": 72585503,
-    "sell": 16951457,
-    "net": 55634046,
-    "ticker": "SPCX"
    },
    {
     "rank": 5,
@@ -59,556 +60,563 @@
      "US8085247976"
     ],
     "name": "SCHWAB US DIVIDEND EQUITY ETF",
-    "buy": 61282329,
-    "sell": 8064275,
-    "net": 53218054,
+    "buy": 50166474.0,
+    "sell": 5596406.0,
+    "net": 44570068.0,
     "ticker": "SCHD"
    },
    {
     "rank": 6,
     "isin": "US9229083632",
     "isins": [
+     "US9229084135",
      "US9229083632"
     ],
     "name": "VANGUARD SP 500 ETF",
-    "buy": 46677303,
-    "sell": 4570364,
-    "net": 42106939,
-    "ticker": "VOO"
+    "buy": 45430277.0,
+    "sell": 4693889.0,
+    "net": 40736388.0,
+    "ticker": "0LO6.L"
    },
    {
     "rank": 7,
-    "isin": "US88160R1014",
+    "isin": "US84615Q1031",
     "isins": [
-     "US88160R1014"
+     "US84615Q1031"
     ],
-    "name": "TESLA INC",
-    "buy": 83841134,
-    "sell": 41933475,
-    "net": 41907659,
-    "ticker": "TSLA"
+    "name": "SPACE EXPLORATION TECHN-CL A",
+    "buy": 59761315.0,
+    "sell": 23701144.0,
+    "net": 36060170.0,
+    "ticker": "SPCX"
    },
    {
     "rank": 8,
-    "isin": "US4581401001",
+    "isin": "US5951121038",
     "isins": [
-     "US4581401001"
+     "US5951121038"
     ],
-    "name": "INTEL CORP",
-    "buy": 66848980,
-    "sell": 34351098,
-    "net": 32497882,
-    "ticker": "INTC"
+    "name": "MICRON TECHNOLOGY INC",
+    "buy": 107520474.0,
+    "sell": 72657429.0,
+    "net": 34863045.0,
+    "ticker": "MU"
    },
    {
     "rank": 9,
-    "isin": "US46138G6492",
+    "isin": "US02079K3059",
     "isins": [
-     "US46138G6492"
+     "US02079K3059"
     ],
-    "name": "INVESCO NASDAQ 100 ETF",
-    "buy": 34701633,
-    "sell": 2726883,
-    "net": 31974750,
-    "ticker": "QQQM"
+    "name": "ALPHABET INC CL A",
+    "buy": 63938409.0,
+    "sell": 31367445.0,
+    "net": 32570964.0,
+    "ticker": "GOOGL"
    },
    {
     "rank": 10,
-    "isin": "US0636795421",
-    "isins": [
-     "US0636795421"
-    ],
-    "name": "MicroSectors Gold Miners 3X Leveraged ETN",
-    "buy": 34765509,
-    "sell": 3431357,
-    "net": 31334152,
-    "ticker": "GDXU"
-   },
-   {
-    "rank": 11,
     "isin": "US46654Q2030",
     "isins": [
      "US46654Q2030"
     ],
     "name": "J.P. MORGAN NASDAQ EQUITY PREMIUM INCOME ETF",
-    "buy": 31613391,
-    "sell": 817523,
-    "net": 30795868,
+    "buy": 32779307.0,
+    "sell": 694875.0,
+    "net": 32084432.0,
     "ticker": "JEPQ"
    },
    {
-    "rank": 12,
-    "isin": "US46436E7186",
-    "isins": [
-     "US46436E7186"
-    ],
-    "name": "ISHARES 0-3 MONTH TREASURY BOND ETF",
-    "buy": 44617648,
-    "sell": 14809411,
-    "net": 29808237,
-    "ticker": "SGOV"
-   },
-   {
-    "rank": 13,
-    "isin": "US25461A3876",
-    "isins": [
-     "US25461A3876"
-    ],
-    "name": "DIREXION SHARES ETF TRUST DAILY MSCI SOUTH KOREA BULL",
-    "buy": 56010950,
-    "sell": 28695748,
-    "net": 27315201,
-    "ticker": "KORU"
-   },
-   {
-    "rank": 14,
-    "isin": "US0079031078",
-    "isins": [
-     "US0079031078"
-    ],
-    "name": "ADVANCED MICRO DEVICES INC",
-    "buy": 41098417,
-    "sell": 14903338,
-    "net": 26195078,
-    "ticker": "AMD"
-   },
-   {
-    "rank": 15,
+    "rank": 11,
     "isin": "US4642874329",
     "isins": [
      "US4642874329"
     ],
     "name": "ISHARES 20+ YEAR TREASURY BOND ETF",
-    "buy": 31446318,
-    "sell": 6069983,
-    "net": 25376335,
+    "buy": 37091219.0,
+    "sell": 5903954.0,
+    "net": 31187265.0,
     "ticker": "TLT"
    },
    {
-    "rank": 16,
-    "isin": "US25460G1388",
+    "rank": 12,
+    "isin": "US55024U1097",
     "isins": [
-     "US25460G1388"
+     "US46612J5074",
+     "US55024U1097"
     ],
-    "name": "DIREXION DAILY 20 YEAR PLUS DRX DLY 20+ YR TREAS BULL 3X",
-    "buy": 24049034,
-    "sell": 480394,
-    "net": 23568641,
-    "ticker": "TMF"
+    "name": "LUMENTUM HOLDINGS INC",
+    "buy": 37285143.0,
+    "sell": 7638601.0,
+    "net": 29646542.0,
+    "ticker": "UNS1.F"
    },
    {
-    "rank": 17,
+    "rank": 13,
+    "isin": "US46138G6492",
+    "isins": [
+     "US46138G6492"
+    ],
+    "name": "INVESCO NASDAQ 100 ETF",
+    "buy": 31824028.0,
+    "sell": 3655343.0,
+    "net": 28168685.0,
+    "ticker": "QQQM"
+   },
+   {
+    "rank": 14,
     "isin": "US74347R2067",
     "isins": [
      "US74347R2067"
     ],
     "name": "PROSHARES ULTRA QQQ ETF",
-    "buy": 27299414,
-    "sell": 4379651,
-    "net": 22919764,
+    "buy": 30990488.0,
+    "sell": 3588859.0,
+    "net": 27401629.0,
     "ticker": "QLD"
    },
    {
-    "rank": 18,
-    "isin": "US68389X1054",
-    "isins": [
-     "US68389X1054"
-    ],
-    "name": "ORACLE CORP",
-    "buy": 30859858,
-    "sell": 9252788,
-    "net": 21607069,
-    "ticker": "ORCL"
-   },
-   {
-    "rank": 19,
-    "isin": "US18915M1071",
-    "isins": [
-     "US18915M1071"
-    ],
-    "name": "CLOUDFLARE INC",
-    "buy": 22169174,
-    "sell": 569186,
-    "net": 21599989,
-    "ticker": "NET"
-   },
-   {
-    "rank": 20,
-    "isin": "AU0000185993",
-    "isins": [
-     "AU0000185993"
-    ],
-    "name": "IRIS ENERGY LTD",
-    "buy": 24328311,
-    "sell": 3218620,
-    "net": 21109692,
-    "ticker": "IREN"
-   },
-   {
-    "rank": 21,
-    "isin": "US02079K1079",
-    "isins": [
-     "US02079K1079"
-    ],
-    "name": "ALPHABET INC CL C",
-    "buy": 20282728,
-    "sell": 1321852,
-    "net": 18960876,
-    "ticker": "GOOG"
-   },
-   {
-    "rank": 22,
-    "isin": "US7561091049",
-    "isins": [
-     "US7561091049"
-    ],
-    "name": "REALTY INCOME CORP",
-    "buy": 19134100,
-    "sell": 754539,
-    "net": 18379562,
-    "ticker": "O"
-   },
-   {
-    "rank": 23,
+    "rank": 15,
     "isin": "US74347X8314",
     "isins": [
      "US74347X8314"
     ],
     "name": "PROSHARES ULTRAPRO QQQ ETF",
-    "buy": 41773959,
-    "sell": 24160444,
-    "net": 17613515,
+    "buy": 49023512.0,
+    "sell": 22147429.0,
+    "net": 26876083.0,
     "ticker": "TQQQ"
    },
    {
-    "rank": 24,
-    "isin": "US78464A8541",
+    "rank": 16,
+    "isin": "AU0000185993",
     "isins": [
-     "US78464A8541"
+     "AU0000185993"
     ],
-    "name": "SPDR PORTFOLIO SP 500 ETF",
-    "buy": 17947460,
-    "sell": 567611,
-    "net": 17379849,
-    "ticker": "SPYM"
+    "name": "IRIS ENERGY LTD",
+    "buy": 28174343.0,
+    "sell": 2431607.0,
+    "net": 25742735.0,
+    "ticker": "IREN"
    },
    {
-    "rank": 25,
-    "isin": "US46090E1038",
+    "rank": 17,
+    "isin": "US0636795421",
     "isins": [
-     "US46090E1038"
+     "US0636795421"
     ],
-    "name": "INVESCO QQQ TRUST SRS 1 ETF",
-    "buy": 25361059,
-    "sell": 8343725,
-    "net": 17017334,
-    "ticker": "QQQ"
+    "name": "MicroSectors Gold Miners 3X Leveraged ETN",
+    "buy": 28366572.0,
+    "sell": 3280530.0,
+    "net": 25086041.0,
+    "ticker": "GDXU"
    },
    {
-    "rank": 26,
-    "isin": "US5801351017",
-    "isins": [
-     "US5801351017"
-    ],
-    "name": "MCDONALD'S CORP",
-    "buy": 18590867,
-    "sell": 2138069,
-    "net": 16452798,
-    "ticker": "MCD"
-   },
-   {
-    "rank": 27,
+    "rank": 18,
     "isin": "US90184D1000",
     "isins": [
      "US90184D1000"
     ],
     "name": "TWIST BIOSCIENCE CORP",
-    "buy": 15641864,
-    "sell": 114552,
-    "net": 15527312,
+    "buy": 20870562.0,
+    "sell": 130437.0,
+    "net": 20740125.0,
     "ticker": "TWST"
    },
    {
-    "rank": 28,
-    "isin": "US0231351067",
+    "rank": 19,
+    "isin": "US0079031078",
     "isins": [
-     "US0231351067"
+     "US0079031078"
     ],
-    "name": "AMAZON.COM INC",
-    "buy": 31005656,
-    "sell": 15669081,
-    "net": 15336575,
-    "ticker": "AMZN"
+    "name": "ADVANCED MICRO DEVICES INC",
+    "buy": 37961630.0,
+    "sell": 17425218.0,
+    "net": 20536412.0,
+    "ticker": "AMD"
    },
    {
-    "rank": 29,
-    "isin": "US67079K1007",
+    "rank": 20,
+    "isin": "US68389X1054",
     "isins": [
-     "US67079K1007"
+     "US68389X1054"
     ],
-    "name": "NUSCALE POWER CORP CL A",
-    "buy": 13974145,
-    "sell": 964670,
-    "net": 13009476,
-    "ticker": "SMR"
+    "name": "ORACLE CORP",
+    "buy": 29934749.0,
+    "sell": 10286428.0,
+    "net": 19648321.0,
+    "ticker": "ORCL"
    },
    {
-    "rank": 30,
-    "isin": "US6974351057",
+    "rank": 21,
+    "isin": "US25460G1388",
     "isins": [
-     "US6974351057"
+     "US25459W5408",
+     "US25460G1388"
     ],
-    "name": "PALO ALTO NETWORKS INC",
-    "buy": 14425430,
-    "sell": 2384060,
-    "net": 12041369,
-    "ticker": "PANW"
+    "name": "DIREXION DAILY 20 YEAR PLUS DRX DLY 20+ YR TREAS BULL 3X",
+    "buy": 20343601.0,
+    "sell": 1033681.0,
+    "net": 19309920.0,
+    "ticker": "TMF"
    },
    {
-    "rank": 31,
-    "isin": "US78462F1030",
+    "rank": 22,
+    "isin": "US78464A8541",
     "isins": [
-     "US78462F1030"
+     "US78464A8541"
     ],
-    "name": "SPDR SP 500 ETF TRUST",
-    "buy": 14519899,
-    "sell": 2603365,
-    "net": 11916535,
-    "ticker": "SPY"
+    "name": "SPDR PORTFOLIO SP 500 ETF",
+    "buy": 17376235.0,
+    "sell": 680359.0,
+    "net": 16695876.0,
+    "ticker": "SPYM"
    },
    {
-    "rank": 32,
+    "rank": 23,
+    "isin": "US7561091049",
+    "isins": [
+     "US7561091049"
+    ],
+    "name": "REALTY INCOME CORP",
+    "buy": 15806559.0,
+    "sell": 869390.0,
+    "net": 14937169.0,
+    "ticker": "O"
+   },
+   {
+    "rank": 24,
+    "isin": "US46090E1038",
+    "isins": [
+     "US46090E1038"
+    ],
+    "name": "INVESCO QQQ TRUST SRS 1 ETF",
+    "buy": 21287173.0,
+    "sell": 7066125.0,
+    "net": 14221048.0,
+    "ticker": "QQQ"
+   },
+   {
+    "rank": 25,
+    "isin": "US25460G2865",
+    "isins": [
+     "US25460G2865"
+    ],
+    "name": "DIREXION DAILY TSLA BULL 2X SHARES",
+    "buy": 18232336.0,
+    "sell": 5828345.0,
+    "net": 12403991.0,
+    "ticker": "TSLL"
+   },
+   {
+    "rank": 26,
     "isin": "US30260D1037",
     "isins": [
      "US30260D1037"
     ],
     "name": "FIGS INC CL A",
-    "buy": 11773146,
-    "sell": 2706,
-    "net": 11770440,
+    "buy": 11772871.0,
+    "sell": 2081.0,
+    "net": 11770790.0,
     "ticker": "FIGS"
    },
    {
-    "rank": 33,
-    "isin": "US3364331070",
+    "rank": 27,
+    "isin": "US67079K1007",
     "isins": [
-     "US3364331070"
+     "US67079K1007"
     ],
-    "name": "FIRST SOLAR INC",
-    "buy": 11705891,
-    "sell": 700694,
-    "net": 11005197,
-    "ticker": "FSLR"
+    "name": "NUSCALE POWER CORP CL A",
+    "buy": 13521844.0,
+    "sell": 1897559.0,
+    "net": 11624285.0,
+    "ticker": "SMR"
    },
    {
-    "rank": 34,
-    "isin": "NL0009805522",
+    "rank": 28,
+    "isin": "US11135F1012",
     "isins": [
-     "NL0009805522"
+     "US11135F1012"
     ],
-    "name": "YANDEX NV CL A",
-    "buy": 24087015,
-    "sell": 13827078,
-    "net": 10259938,
-    "ticker": "NBIS"
+    "name": "BROADCOM INC",
+    "buy": 22388176.0,
+    "sell": 11030893.0,
+    "net": 11357282.0,
+    "ticker": "AVGO"
    },
    {
-    "rank": 35,
-    "isin": "US00123Q1040",
+    "rank": 29,
+    "isin": "US02079K1079",
     "isins": [
-     "US00123Q1040"
+     "US38259P7069",
+     "US02079K1079"
     ],
-    "name": "AGNC INVESTMENT CORP",
-    "buy": 9363095,
-    "sell": 159748,
-    "net": 9203347,
-    "ticker": "AGNC"
+    "name": "ALPHABET INC CL C",
+    "buy": 14466761.0,
+    "sell": 3472399.0,
+    "net": 10994362.0,
+    "ticker": "GOOG"
    },
    {
-    "rank": 36,
-    "isin": "US38149W6306",
+    "rank": 30,
+    "isin": "US78462F1030",
     "isins": [
-     "US38149W6306"
+     "US78462F1030"
     ],
-    "name": "GOLDMAN SACHS NASDAQ 100 CORE PREMIUM INCOME ETF",
-    "buy": 9206546,
-    "sell": 211443,
-    "net": 8995103,
-    "ticker": "GPIQ"
+    "name": "SPDR SP 500 ETF TRUST",
+    "buy": 14001997.0,
+    "sell": 3161594.0,
+    "net": 10840403.0,
+    "ticker": "SPY"
    },
    {
-    "rank": 37,
-    "isin": "US5949724083",
-    "isins": [
-     "US5949724083"
-    ],
-    "name": "MICROSTRATEGY INC CL A",
-    "buy": 23878864,
-    "sell": 15032397,
-    "net": 8846466,
-    "ticker": "MSTR"
-   },
-   {
-    "rank": 38,
-    "isin": "US6792951054",
-    "isins": [
-     "US6792951054"
-    ],
-    "name": "OKTA INC",
-    "buy": 9529348,
-    "sell": 1005097,
-    "net": 8524251,
-    "ticker": "OKTA"
-   },
-   {
-    "rank": 39,
-    "isin": "US4663131039",
-    "isins": [
-     "US4663131039"
-    ],
-    "name": "JABIL INC",
-    "buy": 8696924,
-    "sell": 352700,
-    "net": 8344224,
-    "ticker": "JBL"
-   },
-   {
-    "rank": 40,
-    "isin": "US72919P2020",
-    "isins": [
-     "US72919P2020"
-    ],
-    "name": "PLUG POWER INC",
-    "buy": 8145810,
-    "sell": 511655,
-    "net": 7634155,
-    "ticker": "PLUG"
-   },
-   {
-    "rank": 41,
-    "isin": "US0420682058",
-    "isins": [
-     "US0420682058"
-    ],
-    "name": "ARM HOLDINGS PLC SPON ADS EACH REP 1 ORD SHS",
-    "buy": 15663478,
-    "sell": 8531474,
-    "net": 7132005,
-    "ticker": "ARM"
-   },
-   {
-    "rank": 42,
-    "isin": "US25461A8412",
-    "isins": [
-     "US25461A8412"
-    ],
-    "name": "DIREXION DAILY GOOGL BULL 1.5X SHARES",
-    "buy": 7784591,
-    "sell": 923554,
-    "net": 6861037,
-    "ticker": "GGLL"
-   },
-   {
-    "rank": 43,
-    "isin": "US22266T1097",
-    "isins": [
-     "US22266T1097"
-    ],
-    "name": "COUPANG INC",
-    "buy": 7654955,
-    "sell": 1034147,
-    "net": 6620808,
-    "ticker": "CPNG"
-   },
-   {
-    "rank": 44,
-    "isin": "US19247G1076",
-    "isins": [
-     "US19247G1076"
-    ],
-    "name": "II-VI INCORPORATED Com",
-    "buy": 9384674,
-    "sell": 3026353,
-    "net": 6358322,
-    "ticker": "COHR"
-   },
-   {
-    "rank": 45,
-    "isin": "US19260Q1076",
-    "isins": [
-     "US19260Q1076"
-    ],
-    "name": "COINBASE GLOBAL INC",
-    "buy": 8770579,
-    "sell": 2660885,
-    "net": 6109694,
-    "ticker": "COIN"
-   },
-   {
-    "rank": 46,
-    "isin": "US49876K2024",
-    "isins": [
-     "US49876K2024"
-    ],
-    "name": "KLOTHO NEUROSCIENCES, INC.",
-    "buy": 14542015,
-    "sell": 8500881,
-    "net": 6041134,
-    "ticker": "GRML"
-   },
-   {
-    "rank": 47,
-    "isin": "US85238K1007",
-    "isins": [
-     "US85238K1007"
-    ],
-    "name": "STABLECOINX INC",
-    "buy": 9778336,
-    "sell": 3792278,
-    "net": 5986058,
-    "ticker": "USDE"
-   },
-   {
-    "rank": 48,
-    "isin": "US02072L5654",
-    "isins": [
-     "US02072L5654"
-    ],
-    "name": "ALPHA ARCHITECT 1-3 MONTH BOX ETF",
-    "buy": 14713966,
-    "sell": 8873514,
-    "net": 5840452,
-    "ticker": "BOXX"
-   },
-   {
-    "rank": 49,
-    "isin": "US58933Y1055",
-    "isins": [
-     "US58933Y1055"
-    ],
-    "name": "MERCK N CO INC",
-    "buy": 6174510,
-    "sell": 532176,
-    "net": 5642334,
-    "ticker": "MRK"
-   },
-   {
-    "rank": 50,
+    "rank": 31,
     "isin": "US1725731079",
     "isins": [
      "US1725731079"
     ],
     "name": "Circle Internet",
-    "buy": 12855835,
-    "sell": 7238294,
-    "net": 5617541,
+    "buy": 15835268.0,
+    "sell": 5983572.0,
+    "net": 9851696.0,
     "ticker": "CRCL"
+   },
+   {
+    "rank": 32,
+    "isin": "US6974351057",
+    "isins": [
+     "US6974351057"
+    ],
+    "name": "PALO ALTO NETWORKS INC",
+    "buy": 12155776.0,
+    "sell": 2421851.0,
+    "net": 9733925.0,
+    "ticker": "PANW"
+   },
+   {
+    "rank": 33,
+    "isin": "US38149W6306",
+    "isins": [
+     "US38149W6306"
+    ],
+    "name": "GOLDMAN SACHS NASDAQ 100 CORE PREMIUM INCOME ETF",
+    "buy": 8975985.0,
+    "sell": 280554.0,
+    "net": 8695430.0,
+    "ticker": "GPIQ"
+   },
+   {
+    "rank": 34,
+    "isin": "US4663131039",
+    "isins": [
+     "US4663131039"
+    ],
+    "name": "JABIL INC",
+    "buy": 8847713.0,
+    "sell": 426287.0,
+    "net": 8421426.0,
+    "ticker": "JBL"
+   },
+   {
+    "rank": 35,
+    "isin": "US02072L5654",
+    "isins": [
+     "US02072L5654"
+    ],
+    "name": "ALPHA ARCHITECT 1-3 MONTH BOX ETF",
+    "buy": 14784935.0,
+    "sell": 6523716.0,
+    "net": 8261219.0,
+    "ticker": "BOXX"
+   },
+   {
+    "rank": 36,
+    "isin": "US3364331070",
+    "isins": [
+     "US3364331070"
+    ],
+    "name": "FIRST SOLAR INC",
+    "buy": 9037259.0,
+    "sell": 835372.0,
+    "net": 8201887.0,
+    "ticker": "FSLR"
+   },
+   {
+    "rank": 37,
+    "isin": "US80810D1037",
+    "isins": [
+     "US80810D1037"
+    ],
+    "name": "SCHRODINGER INC",
+    "buy": 8456852.0,
+    "sell": 393694.0,
+    "net": 8063159.0,
+    "ticker": "SDGR"
+   },
+   {
+    "rank": 38,
+    "isin": "US00123Q1040",
+    "isins": [
+     "US02503X1054",
+     "US00123Q1040"
+    ],
+    "name": "AGNC INVESTMENT CORP",
+    "buy": 8155523.0,
+    "sell": 287281.0,
+    "net": 7868242.0,
+    "ticker": "4OQ1.F"
+   },
+   {
+    "rank": 39,
+    "isin": "US6792951054",
+    "isins": [
+     "US6792951054"
+    ],
+    "name": "OKTA INC",
+    "buy": 8999832.0,
+    "sell": 1162657.0,
+    "net": 7837175.0,
+    "ticker": "OKTA"
+   },
+   {
+    "rank": 40,
+    "isin": "US46152A6689",
+    "isins": [
+     "US46152A6689"
+    ],
+    "name": "TRADR 2X LONG SNDK DAILY ETF",
+    "buy": 8652130.0,
+    "sell": 857831.0,
+    "net": 7794299.0,
+    "ticker": "SNXX"
+   },
+   {
+    "rank": 41,
+    "isin": "US8629453007",
+    "isins": [
+     "US8629451027",
+     "US8629453007"
+    ],
+    "name": "STRIVE INC",
+    "buy": 11214405.0,
+    "sell": 3512325.0,
+    "net": 7702079.0,
+    "ticker": "ASST"
+   },
+   {
+    "rank": 42,
+    "isin": "US19247G1076",
+    "isins": [
+     "US9021041085",
+     "US19247G1076"
+    ],
+    "name": "II-VI INCORPORATED Com",
+    "buy": 9757722.0,
+    "sell": 2752789.0,
+    "net": 7004933.0,
+    "ticker": "COHR"
+   },
+   {
+    "rank": 43,
+    "isin": "US72919P2020",
+    "isins": [
+     "US72919P2020"
+    ],
+    "name": "PLUG POWER INC",
+    "buy": 7140057.0,
+    "sell": 750233.0,
+    "net": 6389824.0,
+    "ticker": "PLUG"
+   },
+   {
+    "rank": 44,
+    "isin": "US4581401001",
+    "isins": [
+     "US4581401001"
+    ],
+    "name": "INTEL CORP",
+    "buy": 43162272.0,
+    "sell": 36857322.0,
+    "net": 6304951.0,
+    "ticker": "INTC"
+   },
+   {
+    "rank": 45,
+    "isin": "US5801351017",
+    "isins": [
+     "US5801351017"
+    ],
+    "name": "MCDONALD'S CORP",
+    "buy": 7520500.0,
+    "sell": 1469618.0,
+    "net": 6050882.0,
+    "ticker": "MCD"
+   },
+   {
+    "rank": 46,
+    "isin": "US19260Q1076",
+    "isins": [
+     "US19260Q1076"
+    ],
+    "name": "COINBASE GLOBAL INC",
+    "buy": 8547514.0,
+    "sell": 2605973.0,
+    "net": 5941542.0,
+    "ticker": "COIN"
+   },
+   {
+    "rank": 47,
+    "isin": "US1912161007",
+    "isins": [
+     "US1912161007"
+    ],
+    "name": "THE COCA COLA COMPANY",
+    "buy": 6338866.0,
+    "sell": 635293.0,
+    "net": 5703573.0,
+    "ticker": "KO"
+   },
+   {
+    "rank": 48,
+    "isin": "US46641Q3323",
+    "isins": [
+     "US46641Q3323"
+    ],
+    "name": "JP MORGAN EQUITY PREMIUM INCOME ETF",
+    "buy": 6745748.0,
+    "sell": 1094082.0,
+    "net": 5651666.0,
+    "ticker": "JEPI"
+   },
+   {
+    "rank": 49,
+    "isin": "US0846707026",
+    "isins": [
+     "US0846707026"
+    ],
+    "name": "BERKSHIRE HATHAWAY INC CL B",
+    "buy": 6837245.0,
+    "sell": 1193496.0,
+    "net": 5643749.0,
+    "ticker": "BRK-B"
+   },
+   {
+    "rank": 50,
+    "isin": "US5949724083",
+    "isins": [
+     "US5949724083"
+    ],
+    "name": "MICROSTRATEGY INC CL A",
+    "buy": 20189492.0,
+    "sell": 14598017.0,
+    "net": 5591475.0,
+    "ticker": "MSTR"
    }
   ]
  },
  "1m": {
-  "start": "2026-09-02",
-  "end": "2026-10-01",
+  "start": "2026-09-03",
+  "end": "2026-10-02",
   "rows": [
    {
     "rank": 1,
@@ -617,9 +625,9 @@
      "US46436E7186"
     ],
     "name": "ISHARES 0-3 MONTH TREASURY BOND ETF",
-    "buy": 353101651,
-    "sell": 69659754,
-    "net": 283441897,
+    "buy": 339988999.0,
+    "sell": 67247270.0,
+    "net": 272741729.0,
     "ticker": "SGOV"
    },
    {
@@ -629,45 +637,47 @@
      "US8085247976"
     ],
     "name": "SCHWAB US DIVIDEND EQUITY ETF",
-    "buy": 306776577,
-    "sell": 61175327,
-    "net": 245601251,
+    "buy": 299994283.0,
+    "sell": 58594083.0,
+    "net": 241400200.0,
     "ticker": "SCHD"
    },
    {
     "rank": 3,
+    "isin": "US9229083632",
+    "isins": [
+     "US9229084135",
+     "US9229083632"
+    ],
+    "name": "VANGUARD SP 500 ETF",
+    "buy": 209525907.0,
+    "sell": 23992041.0,
+    "net": 185533867.0,
+    "ticker": "0LO6.L"
+   },
+   {
+    "rank": 4,
     "isin": "US02079K3059",
     "isins": [
      "US02079K3059"
     ],
     "name": "ALPHABET INC CL A",
-    "buy": 358326793,
-    "sell": 146561043,
-    "net": 211765750,
+    "buy": 341996006.0,
+    "sell": 161846152.0,
+    "net": 180149854.0,
     "ticker": "GOOGL"
-   },
-   {
-    "rank": 4,
-    "isin": "US9229083632",
-    "isins": [
-     "US9229083632"
-    ],
-    "name": "VANGUARD SP 500 ETF",
-    "buy": 211401320,
-    "sell": 24062345,
-    "net": 187338975,
-    "ticker": "VOO"
    },
    {
     "rank": 5,
     "isin": "US25461H2913",
     "isins": [
+     "US25461H5726",
      "US25461H2913"
     ],
     "name": "DIREX DAI SEMI BE 3X ETF-USD",
-    "buy": 423351160,
-    "sell": 249096525,
-    "net": 174254635,
+    "buy": 410704818.0,
+    "sell": 255367136.0,
+    "net": 155337683.0,
     "ticker": "SOXS"
    },
    {
@@ -677,9 +687,9 @@
      "US46138G6492"
     ],
     "name": "INVESCO NASDAQ 100 ETF",
-    "buy": 169421292,
-    "sell": 29413849,
-    "net": 140007443,
+    "buy": 165451559.0,
+    "sell": 29310505.0,
+    "net": 136141054.0,
     "ticker": "QQQM"
    },
    {
@@ -689,154 +699,155 @@
      "US0231351067"
     ],
     "name": "AMAZON.COM INC",
-    "buy": 180527660,
-    "sell": 50838899,
-    "net": 129688762,
+    "buy": 177170545.0,
+    "sell": 59891101.0,
+    "net": 117279444.0,
     "ticker": "AMZN"
    },
    {
     "rank": 8,
-    "isin": "US84615Q1031",
-    "isins": [
-     "US84615Q1031"
-    ],
-    "name": "SPACE EXPLORATION TECHN-CL A",
-    "buy": 234801716,
-    "sell": 123215881,
-    "net": 111585835,
-    "ticker": "SPCX"
-   },
-   {
-    "rank": 9,
-    "isin": "US46654Q2030",
-    "isins": [
-     "US46654Q2030"
-    ],
-    "name": "J.P. MORGAN NASDAQ EQUITY PREMIUM INCOME ETF",
-    "buy": 124460686,
-    "sell": 12982246,
-    "net": 111478440,
-    "ticker": "JEPQ"
-   },
-   {
-    "rank": 10,
-    "isin": "US11135F1012",
-    "isins": [
-     "US11135F1012"
-    ],
-    "name": "BROADCOM INC",
-    "buy": 186958989,
-    "sell": 78313300,
-    "net": 108645689,
-    "ticker": "AVGO"
-   },
-   {
-    "rank": 11,
-    "isin": "US74347R2067",
-    "isins": [
-     "US74347R2067"
-    ],
-    "name": "PROSHARES ULTRA QQQ ETF",
-    "buy": 131147728,
-    "sell": 30633523,
-    "net": 100514204,
-    "ticker": "QLD"
-   },
-   {
-    "rank": 12,
     "isin": "US6974351057",
     "isins": [
      "US6974351057"
     ],
     "name": "PALO ALTO NETWORKS INC",
-    "buy": 112780196,
-    "sell": 12519084,
-    "net": 100261113,
+    "buy": 121780203.0,
+    "sell": 12446996.0,
+    "net": 109333207.0,
     "ticker": "PANW"
    },
    {
+    "rank": 9,
+    "isin": "US11135F1012",
+    "isins": [
+     "US11135F1012"
+    ],
+    "name": "BROADCOM INC",
+    "buy": 185196164.0,
+    "sell": 78255672.0,
+    "net": 106940492.0,
+    "ticker": "AVGO"
+   },
+   {
+    "rank": 10,
+    "isin": "US74347R2067",
+    "isins": [
+     "US74347R2067"
+    ],
+    "name": "PROSHARES ULTRA QQQ ETF",
+    "buy": 133727634.0,
+    "sell": 28499494.0,
+    "net": 105228140.0,
+    "ticker": "QLD"
+   },
+   {
+    "rank": 11,
+    "isin": "US84615Q1031",
+    "isins": [
+     "US84615Q1031"
+    ],
+    "name": "SPACE EXPLORATION TECHN-CL A",
+    "buy": 233263375.0,
+    "sell": 128352413.0,
+    "net": 104910962.0,
+    "ticker": "SPCX"
+   },
+   {
+    "rank": 12,
+    "isin": "US46654Q2030",
+    "isins": [
+     "US46654Q2030"
+    ],
+    "name": "J.P. MORGAN NASDAQ EQUITY PREMIUM INCOME ETF",
+    "buy": 113313457.0,
+    "sell": 12885182.0,
+    "net": 100428275.0,
+    "ticker": "JEPQ"
+   },
+   {
     "rank": 13,
-    "isin": "US46222L1089",
-    "isins": [
-     "US46222L1089"
-    ],
-    "name": "IONQ INC",
-    "buy": 201811521,
-    "sell": 119195573,
-    "net": 82615948,
-    "ticker": "IONQ"
-   },
-   {
-    "rank": 14,
-    "isin": "US68389X1054",
-    "isins": [
-     "US68389X1054"
-    ],
-    "name": "ORACLE CORP",
-    "buy": 128836432,
-    "sell": 52917273,
-    "net": 75919159,
-    "ticker": "ORCL"
-   },
-   {
-    "rank": 15,
     "isin": "US78464A8541",
     "isins": [
      "US78464A8541"
     ],
     "name": "SPDR PORTFOLIO SP 500 ETF",
-    "buy": 77567358,
-    "sell": 3423581,
-    "net": 74143778,
+    "buy": 80327284.0,
+    "sell": 3181004.0,
+    "net": 77146279.0,
     "ticker": "SPYM"
    },
    {
+    "rank": 14,
+    "isin": "US55024U1097",
+    "isins": [
+     "US46612J5074",
+     "US55024U1097"
+    ],
+    "name": "LUMENTUM HOLDINGS INC",
+    "buy": 140801402.0,
+    "sell": 64018233.0,
+    "net": 76783169.0,
+    "ticker": "UNS1.F"
+   },
+   {
+    "rank": 15,
+    "isin": "US68389X1054",
+    "isins": [
+     "US68389X1054"
+    ],
+    "name": "ORACLE CORP",
+    "buy": 130430419.0,
+    "sell": 53719324.0,
+    "net": 76711095.0,
+    "ticker": "ORCL"
+   },
+   {
     "rank": 16,
+    "isin": "US46222L1089",
+    "isins": [
+     "US46222L1089"
+    ],
+    "name": "IONQ INC",
+    "buy": 198192570.0,
+    "sell": 125338963.0,
+    "net": 72853607.0,
+    "ticker": "IONQ"
+   },
+   {
+    "rank": 17,
     "isin": "US46090E1038",
     "isins": [
      "US46090E1038"
     ],
     "name": "INVESCO QQQ TRUST SRS 1 ETF",
-    "buy": 121849799,
-    "sell": 52769179,
-    "net": 69080620,
+    "buy": 120172980.0,
+    "sell": 50187514.0,
+    "net": 69985466.0,
     "ticker": "QQQ"
    },
    {
-    "rank": 17,
-    "isin": "US55024U1097",
-    "isins": [
-     "US55024U1097"
-    ],
-    "name": "LUMENTUM HOLDINGS INC",
-    "buy": 119421632,
-    "sell": 67070720,
-    "net": 52350911,
-    "ticker": "LITE"
-   },
-   {
     "rank": 18,
-    "isin": "US8740391003",
-    "isins": [
-     "US8740391003"
-    ],
-    "name": "TAIWAN SEMICONDUCTOR MANUFACTURING CO LTD ADR",
-    "buy": 124076312,
-    "sell": 71970558,
-    "net": 52105754,
-    "ticker": "TSM"
-   },
-   {
-    "rank": 19,
     "isin": "NL0009805522",
     "isins": [
      "NL0009805522"
     ],
     "name": "YANDEX NV CL A",
-    "buy": 117980187,
-    "sell": 67302630,
-    "net": 50677557,
+    "buy": 119474345.0,
+    "sell": 57780351.0,
+    "net": 61693994.0,
     "ticker": "NBIS"
+   },
+   {
+    "rank": 19,
+    "isin": "US8740391003",
+    "isins": [
+     "US8740391003"
+    ],
+    "name": "TAIWAN SEMICONDUCTOR MANUFACTURING CO LTD ADR",
+    "buy": 130901525.0,
+    "sell": 78148012.0,
+    "net": 52753513.0,
+    "ticker": "TSM"
    },
    {
     "rank": 20,
@@ -845,9 +856,9 @@
      "US58933Y1055"
     ],
     "name": "MERCK N CO INC",
-    "buy": 56946837,
-    "sell": 9121676,
-    "net": 47825161,
+    "buy": 57135917.0,
+    "sell": 8989309.0,
+    "net": 48146608.0,
     "ticker": "MRK"
    },
    {
@@ -857,94 +868,95 @@
      "US0636795421"
     ],
     "name": "MicroSectors Gold Miners 3X Leveraged ETN",
-    "buy": 75090635,
-    "sell": 28480663,
-    "net": 46609972,
+    "buy": 74220121.0,
+    "sell": 27208713.0,
+    "net": 47011408.0,
     "ticker": "GDXU"
    },
    {
     "rank": 22,
-    "isin": "US02072L5654",
-    "isins": [
-     "US02072L5654"
-    ],
-    "name": "ALPHA ARCHITECT 1-3 MONTH BOX ETF",
-    "buy": 79739126,
-    "sell": 35639284,
-    "net": 44099842,
-    "ticker": "BOXX"
-   },
-   {
-    "rank": 23,
     "isin": "US7561091049",
     "isins": [
      "US7561091049"
     ],
     "name": "REALTY INCOME CORP",
-    "buy": 51182530,
-    "sell": 7243554,
-    "net": 43938976,
+    "buy": 53976958.0,
+    "sell": 7071166.0,
+    "net": 46905792.0,
     "ticker": "O"
    },
    {
-    "rank": 24,
-    "isin": "US5949724083",
-    "isins": [
-     "US5949724083"
-    ],
-    "name": "MICROSTRATEGY INC CL A",
-    "buy": 152648924,
-    "sell": 109613273,
-    "net": 43035650,
-    "ticker": "MSTR"
-   },
-   {
-    "rank": 25,
-    "isin": "US02079K1079",
-    "isins": [
-     "US02079K1079"
-    ],
-    "name": "ALPHABET INC CL C",
-    "buy": 66369637,
-    "sell": 24659750,
-    "net": 41709888,
-    "ticker": "GOOG"
-   },
-   {
-    "rank": 26,
+    "rank": 23,
     "isin": "US4642874329",
     "isins": [
      "US4642874329"
     ],
     "name": "ISHARES 20+ YEAR TREASURY BOND ETF",
-    "buy": 64225035,
-    "sell": 23669108,
-    "net": 40555926,
+    "buy": 69988401.0,
+    "sell": 23800197.0,
+    "net": 46188204.0,
     "ticker": "TLT"
    },
    {
-    "rank": 27,
+    "rank": 24,
+    "isin": "US02072L5654",
+    "isins": [
+     "US02072L5654"
+    ],
+    "name": "ALPHA ARCHITECT 1-3 MONTH BOX ETF",
+    "buy": 77363480.0,
+    "sell": 35674468.0,
+    "net": 41689012.0,
+    "ticker": "BOXX"
+   },
+   {
+    "rank": 25,
+    "isin": "US4642875235",
+    "isins": [
+     "US4642875235"
+    ],
+    "name": "ISHARES SEMICONDUCTOR ETF",
+    "buy": 153031438.0,
+    "sell": 111585075.0,
+    "net": 41446363.0,
+    "ticker": "SOXX"
+   },
+   {
+    "rank": 26,
     "isin": "US24703L2025",
     "isins": [
+     "US24703L1035",
      "US24703L2025"
     ],
     "name": "DELL TECHNOLOGIES INC CL C",
-    "buy": 82405894,
-    "sell": 41878724,
-    "net": 40527170,
+    "buy": 82666788.0,
+    "sell": 42095005.0,
+    "net": 40571783.0,
     "ticker": "DELL"
    },
    {
-    "rank": 28,
+    "rank": 27,
     "isin": "US18915M1071",
     "isins": [
      "US18915M1071"
     ],
     "name": "CLOUDFLARE INC",
-    "buy": 46968117,
-    "sell": 7303434,
-    "net": 39664683,
+    "buy": 47023744.0,
+    "sell": 7367009.0,
+    "net": 39656735.0,
     "ticker": "NET"
+   },
+   {
+    "rank": 28,
+    "isin": "US5949724083",
+    "isins": [
+     "US5949724083"
+    ],
+    "name": "MICROSTRATEGY INC CL A",
+    "buy": 150819424.0,
+    "sell": 111749548.0,
+    "net": 39069876.0,
+    "ticker": "MSTR"
    },
    {
     "rank": 29,
@@ -953,178 +965,182 @@
      "US78462F1030"
     ],
     "name": "SPDR SP 500 ETF TRUST",
-    "buy": 63566667,
-    "sell": 25457243,
-    "net": 38109425,
+    "buy": 63495723.0,
+    "sell": 24908559.0,
+    "net": 38587164.0,
     "ticker": "SPY"
    },
    {
     "rank": 30,
-    "isin": "US5801351017",
+    "isin": "US02079K1079",
     "isins": [
-     "US5801351017"
+     "US38259P7069",
+     "US02079K1079"
     ],
-    "name": "MCDONALD'S CORP",
-    "buy": 36373219,
-    "sell": 5300559,
-    "net": 31072660,
-    "ticker": "MCD"
+    "name": "ALPHABET INC CL C",
+    "buy": 64388426.0,
+    "sell": 26317933.0,
+    "net": 38070493.0,
+    "ticker": "GOOG"
    },
    {
     "rank": 31,
-    "isin": "US25460G1388",
-    "isins": [
-     "US25460G1388"
-    ],
-    "name": "DIREXION DAILY 20 YEAR PLUS DRX DLY 20+ YR TREAS BULL 3X",
-    "buy": 49436389,
-    "sell": 19266215,
-    "net": 30170174,
-    "ticker": "TMF"
-   },
-   {
-    "rank": 32,
-    "isin": "US4642875235",
-    "isins": [
-     "US4642875235"
-    ],
-    "name": "ISHARES SEMICONDUCTOR ETF",
-    "buy": 148339510,
-    "sell": 118283262,
-    "net": 30056248,
-    "ticker": "SOXX"
-   },
-   {
-    "rank": 33,
     "isin": "US30303M1027",
     "isins": [
      "US30303M1027"
     ],
     "name": "META PLATFORMS INC CL A",
-    "buy": 217993599,
-    "sell": 188819312,
-    "net": 29174286,
+    "buy": 232251055.0,
+    "sell": 194401357.0,
+    "net": 37849698.0,
     "ticker": "META"
    },
    {
-    "rank": 34,
+    "rank": 32,
+    "isin": "US88160R1014",
+    "isins": [
+     "US88160R1014"
+    ],
+    "name": "TESLA INC",
+    "buy": 389717570.0,
+    "sell": 352473851.0,
+    "net": 37243719.0,
+    "ticker": "TSLA"
+   },
+   {
+    "rank": 33,
     "isin": "US90184D1000",
     "isins": [
      "US90184D1000"
     ],
     "name": "TWIST BIOSCIENCE CORP",
-    "buy": 31076047,
-    "sell": 2580198,
-    "net": 28495848,
+    "buy": 37143450.0,
+    "sell": 2589396.0,
+    "net": 34554054.0,
     "ticker": "TWST"
    },
    {
-    "rank": 35,
-    "isin": "US22266T1097",
+    "rank": 34,
+    "isin": "US5801351017",
     "isins": [
-     "US22266T1097"
+     "US5801351017"
     ],
-    "name": "COUPANG INC",
-    "buy": 34929909,
-    "sell": 6928099,
-    "net": 28001810,
-    "ticker": "CPNG"
+    "name": "MCDONALD'S CORP",
+    "buy": 37900651.0,
+    "sell": 5212003.0,
+    "net": 32688649.0,
+    "ticker": "MCD"
+   },
+   {
+    "rank": 35,
+    "isin": "US25460G1388",
+    "isins": [
+     "US25459W5408",
+     "US25460G1388"
+    ],
+    "name": "DIREXION DAILY 20 YEAR PLUS DRX DLY 20+ YR TREAS BULL 3X",
+    "buy": 51729081.0,
+    "sell": 19622924.0,
+    "net": 32106157.0,
+    "ticker": "TMF"
    },
    {
     "rank": 36,
     "isin": "US00123Q1040",
     "isins": [
+     "US02503X1054",
      "US00123Q1040"
     ],
     "name": "AGNC INVESTMENT CORP",
-    "buy": 29787698,
-    "sell": 2010716,
-    "net": 27776982,
-    "ticker": "AGNC"
+    "buy": 30798474.0,
+    "sell": 2000933.0,
+    "net": 28797542.0,
+    "ticker": "4OQ1.F"
    },
    {
     "rank": 37,
-    "isin": "US78433H6751",
-    "isins": [
-     "US78433H6751"
-    ],
-    "name": "NEOS NASDAQ 100 HIGH INCOME ETF",
-    "buy": 54076877,
-    "sell": 26885731,
-    "net": 27191146,
-    "ticker": "QQQI"
-   },
-   {
-    "rank": 38,
     "isin": "US0846707026",
     "isins": [
      "US0846707026"
     ],
     "name": "BERKSHIRE HATHAWAY INC CL B",
-    "buy": 37803755,
-    "sell": 11338556,
-    "net": 26465199,
-    "ticker": "BRK.B"
+    "buy": 39598550.0,
+    "sell": 11084766.0,
+    "net": 28513784.0,
+    "ticker": "BRK-B"
+   },
+   {
+    "rank": 38,
+    "isin": "US22266T1097",
+    "isins": [
+     "US22266T1097"
+    ],
+    "name": "COUPANG INC",
+    "buy": 33969073.0,
+    "sell": 7126379.0,
+    "net": 26842694.0,
+    "ticker": "CPNG"
    },
    {
     "rank": 39,
-    "isin": "US7731211089",
+    "isin": "US78433H6751",
     "isins": [
-     "US7731211089"
+     "US78433H6751"
     ],
-    "name": "ROCKET LAB CORPORATION COM USD0.0001",
-    "buy": 71721646,
-    "sell": 45482332,
-    "net": 26239314,
-    "ticker": "RKLB"
+    "name": "NEOS NASDAQ 100 HIGH INCOME ETF",
+    "buy": 52212678.0,
+    "sell": 26729343.0,
+    "net": 25483335.0,
+    "ticker": "QQQI"
    },
    {
     "rank": 40,
-    "isin": "KYG651631007",
+    "isin": "US7731211089",
     "isins": [
-     "KYG651631007"
+     "US7731221062",
+     "US7731211089"
     ],
-    "name": "JOBY AVIATION INC",
-    "buy": 30099488,
-    "sell": 5619054,
-    "net": 24480434,
-    "ticker": "JOBY"
+    "name": "ROCKET LAB CORPORATION COM USD0.0001",
+    "buy": 70389893.0,
+    "sell": 45399454.0,
+    "net": 24990438.0,
+    "ticker": "RKLB"
    },
    {
     "rank": 41,
-    "isin": "US0494681010",
-    "isins": [
-     "US0494681010"
-    ],
-    "name": "ATLASSIAN CORP",
-    "buy": 27992812,
-    "sell": 3537399,
-    "net": 24455412,
-    "ticker": "TEAM"
-   },
-   {
-    "rank": 42,
     "isin": "US1912161007",
     "isins": [
      "US1912161007"
     ],
     "name": "THE COCA COLA COMPANY",
-    "buy": 32061912,
-    "sell": 7812026,
-    "net": 24249886,
+    "buy": 31349807.0,
+    "sell": 7335065.0,
+    "net": 24014743.0,
     "ticker": "KO"
    },
    {
-    "rank": 43,
+    "rank": 42,
     "isin": "US46641Q3323",
     "isins": [
      "US46641Q3323"
     ],
     "name": "JP MORGAN EQUITY PREMIUM INCOME ETF",
-    "buy": 30487972,
-    "sell": 6456569,
-    "net": 24031402,
+    "buy": 29653626.0,
+    "sell": 5883249.0,
+    "net": 23770378.0,
     "ticker": "JEPI"
+   },
+   {
+    "rank": 43,
+    "isin": "KYG651631007",
+    "isins": [
+     "KYG651631007"
+    ],
+    "name": "JOBY AVIATION INC",
+    "buy": 29470836.0,
+    "sell": 5769473.0,
+    "net": 23701363.0,
+    "ticker": "JOBY"
    },
    {
     "rank": 44,
@@ -1133,9 +1149,9 @@
      "US6792951054"
     ],
     "name": "OKTA INC",
-    "buy": 28829290,
-    "sell": 5605828,
-    "net": 23223462,
+    "buy": 29283056.0,
+    "sell": 5726236.0,
+    "net": 23556820.0,
     "ticker": "OKTA"
    },
    {
@@ -1145,70 +1161,72 @@
      "US9311421039"
     ],
     "name": "WALMART INC",
-    "buy": 32983257,
-    "sell": 12663012,
-    "net": 20320245,
+    "buy": 33257090.0,
+    "sell": 11923655.0,
+    "net": 21333435.0,
     "ticker": "WMT"
    },
    {
     "rank": 46,
-    "isin": "US3364331070",
-    "isins": [
-     "US3364331070"
-    ],
-    "name": "FIRST SOLAR INC",
-    "buy": 24024106,
-    "sell": 4388294,
-    "net": 19635811,
-    "ticker": "FSLR"
-   },
-   {
-    "rank": 47,
-    "isin": "US09175A2069",
-    "isins": [
-     "US09175A2069"
-    ],
-    "name": "BITMINE IMMERSION TECHNOLOGI",
-    "buy": 55765020,
-    "sell": 36638845,
-    "net": 19126175,
-    "ticker": "BMNR"
-   },
-   {
-    "rank": 48,
     "isin": "US6541061031",
     "isins": [
      "US6541061031"
     ],
     "name": "NIKE INC CL B",
-    "buy": 27123165,
-    "sell": 8160786,
-    "net": 18962379,
+    "buy": 27567413.0,
+    "sell": 8349547.0,
+    "net": 19217865.0,
     "ticker": "NKE"
+   },
+   {
+    "rank": 47,
+    "isin": "US3364331070",
+    "isins": [
+     "US3364331070"
+    ],
+    "name": "FIRST SOLAR INC",
+    "buy": 23295646.0,
+    "sell": 4483061.0,
+    "net": 18812584.0,
+    "ticker": "FSLR"
+   },
+   {
+    "rank": 48,
+    "isin": "US38149W6306",
+    "isins": [
+     "US38149W6306"
+    ],
+    "name": "GOLDMAN SACHS NASDAQ 100 CORE PREMIUM INCOME ETF",
+    "buy": 21415163.0,
+    "sell": 2891862.0,
+    "net": 18523301.0,
+    "ticker": "GPIQ"
    },
    {
     "rank": 49,
     "isin": "US8629453007",
     "isins": [
+     "US8629451027",
      "US8629453007"
     ],
     "name": "STRIVE INC",
-    "buy": 39145485,
-    "sell": 20266597,
-    "net": 18878888,
+    "buy": 39665371.0,
+    "sell": 21887512.0,
+    "net": 17777859.0,
     "ticker": "ASST"
    },
    {
     "rank": 50,
-    "isin": "US25461A8412",
+    "isin": "US74347Y6564",
     "isins": [
-     "US25461A8412"
+     "US74347Y7976",
+     "US74347Y6564"
     ],
-    "name": "DIREXION DAILY GOOGL BULL 1.5X SHARES",
-    "buy": 33147939,
-    "sell": 14327006,
-    "net": 18820934,
-    "ticker": "GGLL"
+    "name": "PROSHARES ULTRASHORT BLOOMBE",
+    "buy": 47714937.0,
+    "sell": 30014539.0,
+    "net": 17700398.0,
+    "ticker": "SCO"
    }
   ]
  }
