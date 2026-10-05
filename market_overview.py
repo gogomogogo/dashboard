@@ -253,10 +253,13 @@ with netbuy_slot:
         h1, h2 = st.columns([3, 1], vertical_alignment="center")
         nb_span = h2.segmented_control("기간", ["1주", "1개월"], default="1주",
                                        key="netbuy_span", label_visibility="collapsed") or "1주"
-        with st.spinner("예탁결제원에서 순매수 순위를 불러오는 중"):
+        with st.spinner("순매수 순위를 불러오는 중"):
             nb_all = data.get_net_buy_top()
             nb = nb_all["1w" if nb_span == "1주" else "1m"]
-            rows = data.attach_tickers([dict(r) for r in nb["rows"][:10]])
+            rows = [dict(r) for r in nb["rows"][:10]]
+        for r in rows:  # 미국 상장 티커가 아닌 잘못된 연결은 비워 둔다
+            if not data.is_us_ticker(r.get("ticker")):
+                r["ticker"] = None
             tickers = tuple(r["ticker"] for r in rows if r["ticker"])
             closes = data.get_closes_3mo(tickers) if tickers else pd.DataFrame()
         h1.caption(
@@ -276,7 +279,7 @@ with netbuy_slot:
             table.append({
                 "순위": r["rank"],
                 "종목": f"/stock?ticker={t}" if t else None,
-                "이름": r["name"],
+                "이름": r.get("display_name") or r["name"],
                 "순매수": _usd(r["net"]),
                 "원화 환산": _krw(r["net"], rate),
                 "기간 등락률": ret,
@@ -306,9 +309,11 @@ with netbuy_slot:
                     "이름": st.column_config.TextColumn(width="medium"),
                 },
             )
-            st.caption(f"출처 한국예탁결제원 SEIBro ({nb_all['source']}) · 원화 환산은 현재 환율 기준 · "
-                       "굵은 선은 기간 등락률 상위 3개")
-            if nb_all.get("live_error"):
-                st.caption(f":orange[실시간 조회 실패: {nb_all['live_error']}]")
+            st.caption(f"출처 한국예탁결제원 SEIBro · {nb_all.get('updated', '')} 수집 · "
+                       "원화 환산은 현재 환율 기준 · 굵은 선은 기간 등락률 상위 3개")
+            age = (pd.Timestamp.now(tz="Asia/Seoul").date() - nb["end"]).days
+            if age > 5:
+                st.caption(f":orange[데이터가 {age}일 전 기준입니다. 저장소 Actions의 'SEIBro 순매수 저장'이 "
+                           "정상적으로 돌고 있는지 확인해 주세요.]")
     except Exception as e:
         st.error(f"국내 순매수 데이터를 불러오지 못했습니다: {e}")
