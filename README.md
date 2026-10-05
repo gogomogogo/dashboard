@@ -8,7 +8,7 @@ streamlit run app.py
 브라우저에서 http://localhost:8501 이 열립니다. 상단 메뉴로 페이지를 전환합니다.
 
 ## 페이지
-- 시장 개요: S&P 500 히트맵, 주요 매체 이슈(한국어 번역), 10년물 금리, 공포와 탐욕 지수, 원/달러 환율, VIX
+- 시장 개요: S&P 500 히트맵, 섹터 흐름, 국내 순매수 TOP10, 주요 매체 이슈(한국어 번역), 10년물 금리, 공포와 탐욕 지수, 원/달러 환율, VIX
 - 종목 분석: 티커 검색, 캔들 차트(거래량, 이동평균선, 볼린저밴드, RSI, MACD), 기본 지표, 뉴스
 - 캘린더: 주요국 경제지표 발표 일정, 미국 실적발표 일정 (주 단위)
 
@@ -27,6 +27,7 @@ streamlit run app.py
 - 시세, 시가총액, 기업 정보, 뉴스, 경제지표·실적 캘린더: Yahoo Finance (yfinance)
 - 10년물 국채금리: FRED DGS10 (실패 시 Yahoo ^TNX)
 - 공포와 탐욕 지수: 공개 과거 데이터(GitHub) + CNN
+- 국내 순매수 TOP10: 한국예탁결제원 SEIBro (티커 연결: OpenFIGI)
 - 주요 이슈: Reuters·Bloomberg(Google 뉴스 경유), WSJ, FT, CNBC, MarketWatch, Yahoo Finance RSS
 
 ## 번역 품질 높이기 (선택)

@@ -430,8 +430,13 @@ SECTOR_COLORS = {
 }
 
 
-def sector_chart(pct: pd.DataFrame, names: dict, n_lead: int = 3, height: int = 460) -> go.Figure:
-    """기준일 0% 대비 섹터 ETF 등락률을 겹쳐 그린다. 상위 n_lead개(주도 섹터)는 굵고 진하게."""
+def sector_chart(pct: pd.DataFrame, names: dict, n_lead: int = 3, height: int = 460,
+                 colors: dict | None = None, label=None) -> go.Figure:
+    """기준일 0% 대비 등락률을 겹쳐 그린다. 상위 n_lead개는 굵고 진하게.
+    colors: {열: 색}, label: 열 → 라벨 문자열 (기본 '이름(티커)')."""
+    colors = colors or SECTOR_COLORS
+    label_of = label or (lambda t: f"{names.get(t, t)}({t})")
+    pct = pct.dropna(axis=1, how="all")
     last = pct.iloc[-1].dropna().sort_values(ascending=False)
     leaders = set(last.index[:n_lead])
     x = pct.index.strftime("%Y-%m-%d").tolist()
@@ -441,10 +446,10 @@ def sector_chart(pct: pd.DataFrame, names: dict, n_lead: int = 3, height: int = 
     order = [t for t in last.index if t not in leaders][::-1] + [t for t in last.index if t in leaders][::-1]
     for t in order:
         lead = t in leaders
-        label = f"{names.get(t, t)}({t})"
+        label = label_of(t)
         fig.add_trace(go.Scatter(
             x=x, y=[round(float(v), 2) for v in pct[t].values], mode="lines", name=label,
-            line=dict(color=SECTOR_COLORS.get(t, TEXT), width=3.2 if lead else 1.4),
+            line=dict(color=colors.get(t, TEXT), width=3.2 if lead else 1.4),
             opacity=1.0 if lead else 0.45,
             hovertemplate=f"{label} %{{y:+.2f}}%<extra></extra>",
             legendrank=list(last.index).index(t),
@@ -463,8 +468,8 @@ def sector_chart(pct: pd.DataFrame, names: dict, n_lead: int = 3, height: int = 
         lead = t in leaders
         fig.add_annotation(
             x=x[-1], y=y, xanchor="left", yanchor="middle", showarrow=False, xshift=6,
-            text=f"{'<b>' if lead else ''}{names.get(t, t)}({t}) {last[t]:+.1f}%{'</b>' if lead else ''}",
-            font=dict(size=12 if lead else 11, color=SECTOR_COLORS.get(t, TEXT)),
+            text=f"{'<b>' if lead else ''}{label_of(t)} {last[t]:+.1f}%{'</b>' if lead else ''}",
+            font=dict(size=12 if lead else 11, color=colors.get(t, TEXT)),
             opacity=1.0 if lead else 0.75,
         )
 

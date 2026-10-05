@@ -1,6 +1,9 @@
 """데이터 수집 모듈: S&P 500 히트맵용 데이터와 거시 지표 시계열."""
 import io
+import re
+import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor
+from datetime import date, timedelta
 
 import pandas as pd
 import requests
@@ -578,5 +581,131 @@ def sector_returns(close: pd.DataFrame, months: float = 1) -> pd.DataFrame:
     start = end - (pd.DateOffset(weeks=1) if months < 1 else pd.DateOffset(months=int(months)))
     base_idx = close.index[close.index <= start]
     base_day = base_idx[-1] if len(base_idx) else close.index[0]
+    window = close.loc[base_day:]
+    return (window / window.iloc[0] - 1) * 100
+
+
+# ---------------------------------------------------------------- SEIBro 국내 투자자 순매수
+# 예탁결제원 SEIBro '종목별내역(주식TOP50)' 화면(BIP_CNTS10013V)이 쓰는 websquare 요청.
+# 키가 필요 없고 XML POST 한 번에 상위 50행이 온다. 금액 단위는 USD.
+SEIBRO_URL = "https://seibro.or.kr/websquare/engine/proworks/callServletService.jsp"
+SEIBRO_REFERER = ("https://seibro.or.kr/websquare/control.jsp?"
+                  "w2xPath=/IPORTAL/user/ovsSec/BIP_CNTS10013V.xml&menuNo=921")
+SEIBRO_TASK = "ksd.safe.bip.cnts.OvsSec.process.OvsSecIsinPTask"
+_ISIN_RE = re.compile(r"\b(US[0-9A-Z]{9}[0-9])\b")
+# 분할·변경 뒤 이름 꼬리: '… SPLR 39326002188 US9229084135'
+_ACTION_TAIL = re.compile(r"\s+[A-Z]{2,6}\s+\d{6,}(?:\s+[A-Z]{2}[0-9A-Z]{10})?\s*$")
+
+
+def _seibro(action: str, **params) -> list:
+    body = "".join(f'<{k} value="{v}"/>' for k, v in params.items())
+    xml = (f'<reqParam action="{action}" task="{SEIBRO_TASK}">'
+           f'<PG_START value="1"/><PG_END value="50"/>{body}</reqParam>')
+    r = requests.post(SEIBRO_URL, data=xml.encode("utf-8"), timeout=30, headers={
+        **UA, "Content-Type": "application/xml; charset=UTF-8", "Referer": SEIBRO_REFERER,
+    })
+    r.raise_for_status()
+    root = ET.fromstring(r.content)
+    rows = []
+    for res in root.iter("result"):
+        v = {c.tag: c.get("value") for c in res}
+        isin = (v.get("ISIN") or "").strip()
+        if not isin:
+            continue
+        raw = (v.get("KOR_SECN_NM") or "").strip()
+        new_isins = [i for i in _ISIN_RE.findall(raw) if i != isin]
+        rows.append({
+            "rank": int(float(v.get("RNUM") or len(rows) + 1)),
+            "isin": isin,
+            "isins": new_isins + [isin],          # 분할 뒤 새 ISIN을 먼저 시도
+            "name": _ACTION_TAIL.sub("", raw).strip() or raw,
+            "buy": _num(v.get("SUM_FRSEC_BUY_AMT")),
+            "sell": _num(v.get("SUM_FRSEC_SELL_AMT")),
+            "net": _num(v.get("SUM_FRSEC_NET_BUY_AMT")),
+        })
+    return rows
+
+
+def _seibro_net(start: date, end: date) -> list:
+    return _seibro("getImptFrcurStkSetlAmtList", START_DT=start.strftime("%Y%m%d"),
+                   END_DT=end.strftime("%Y%m%d"), S_TYPE="2", S_COUNTRY="US", D_TYPE="4")
+
+
+@st.cache_data(ttl=6 * 3600, show_spinner=False)
+def get_net_buy_top() -> dict:
+    """국내 투자자의 미국 주식 순매수 상위 50 (1주·1개월). 결제 기준이라 하루 늦게 반영된다.
+    반환: {"1w": {"start", "end", "rows"}, "1m": {...}}"""
+    kst_today = pd.Timestamp.now(tz="Asia/Seoul").date()
+    end, rows_1w = None, []
+    day = kst_today - timedelta(days=1)
+    for _ in range(10):  # 데이터가 있는 가장 최근 결제일을 찾는다
+        if day.weekday() < 5:
+            rows_1w = _seibro_net(day - timedelta(days=6), day)
+            if rows_1w:
+                end = day
+                break
+        day -= timedelta(days=1)
+    if end is None:
+        raise RuntimeError("SEIBro에서 최근 10일 안의 순매수 데이터를 찾지 못했습니다.")
+    start_1m = end - timedelta(days=29)
+    return {
+        "1w": {"start": end - timedelta(days=6), "end": end, "rows": rows_1w},
+        "1m": {"start": start_1m, "end": end, "rows": _seibro_net(start_1m, end)},
+    }
+
+
+@st.cache_data(ttl=7 * 86400, show_spinner=False)
+def isin_to_ticker(isins: tuple) -> dict:
+    """ISIN → Yahoo 티커. OpenFIGI(무료, 키 없음)를 먼저, 실패하면 Yahoo 검색."""
+    out = {}
+    for i in range(0, len(isins), 10):  # OpenFIGI 무키: 요청당 10건
+        chunk = list(isins[i:i + 10])
+        try:
+            r = requests.post("https://api.openfigi.com/v3/mapping", timeout=20,
+                              json=[{"idType": "ID_ISIN", "idValue": c, "exchCode": "US"} for c in chunk])
+            r.raise_for_status()
+            for c, item in zip(chunk, r.json()):
+                data_ = [d for d in (item or {}).get("data") or [] if d.get("ticker")]
+                if data_:
+                    out[c] = str(data_[0]["ticker"]).replace("/", "-")
+        except Exception:
+            pass
+    for c in isins:
+        if c in out:
+            continue
+        try:
+            r = requests.get("https://query2.finance.yahoo.com/v1/finance/search", headers=UA, timeout=10,
+                             params={"q": c, "quotesCount": 1, "newsCount": 0})
+            quotes = r.json().get("quotes") or []
+            if quotes and quotes[0].get("symbol"):
+                out[c] = quotes[0]["symbol"]
+        except Exception:
+            pass
+    return out
+
+
+def attach_tickers(rows: list) -> list:
+    isins = tuple(dict.fromkeys(i for r in rows for i in r["isins"]))
+    mapping = isin_to_ticker(isins)
+    for r in rows:
+        r["ticker"] = next((mapping[i] for i in r["isins"] if mapping.get(i)), None)
+    return rows
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def get_closes_3mo(tickers: tuple) -> pd.DataFrame:
+    df = yf.download(list(tickers), period="3mo", interval="1d", auto_adjust=True,
+                     progress=False, threads=True)
+    if df.empty:
+        return df
+    close = df["Close"] if isinstance(df.columns, pd.MultiIndex) else df[["Close"]].rename(columns={"Close": tickers[0]})
+    close.index = _naive(close.index)
+    return close.dropna(how="all").ffill()
+
+
+def returns_since(close: pd.DataFrame, start: date) -> pd.DataFrame:
+    """start 직전 거래일 종가를 0%로 한 누적 등락률(%)."""
+    before = close.index[close.index < pd.Timestamp(start)]
+    base_day = before[-1] if len(before) else close.index[0]
     window = close.loc[base_day:]
     return (window / window.iloc[0] - 1) * 100
