@@ -1,6 +1,8 @@
 """데이터 수집 모듈: S&P 500 히트맵용 데이터와 거시 지표 시계열."""
 import io
+import json
 import re
+from pathlib import Path
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
@@ -592,6 +594,8 @@ SEIBRO_URL = "https://seibro.or.kr/websquare/engine/proworks/callServletService.
 SEIBRO_REFERER = ("https://seibro.or.kr/websquare/control.jsp?"
                   "w2xPath=/IPORTAL/user/ovsSec/BIP_CNTS10013V.xml&menuNo=921")
 SEIBRO_TASK = "ksd.safe.bip.cnts.OvsSec.process.OvsSecIsinPTask"
+SEIBRO_TIMEOUT = (5, 12)  # (연결, 응답) 초. 막혀 있으면 오래 기다리지 않고 바로 포기한다
+SNAPSHOT_FILE = Path(__file__).resolve().parent / "snapshots" / "net_buy.json"
 _ISIN_RE = re.compile(r"\b(US[0-9A-Z]{9}[0-9])\b")
 # 분할·변경 뒤 이름 꼬리: '… SPLR 39326002188 US9229084135'
 _ACTION_TAIL = re.compile(r"\s+[A-Z]{2,6}\s+\d{6,}(?:\s+[A-Z]{2}[0-9A-Z]{10})?\s*$")
@@ -601,11 +605,23 @@ def _seibro(action: str, **params) -> list:
     body = "".join(f'<{k} value="{v}"/>' for k, v in params.items())
     xml = (f'<reqParam action="{action}" task="{SEIBRO_TASK}">'
            f'<PG_START value="1"/><PG_END value="50"/>{body}</reqParam>')
-    r = requests.post(SEIBRO_URL, data=xml.encode("utf-8"), timeout=30, headers={
-        **UA, "Content-Type": "application/xml; charset=UTF-8", "Referer": SEIBRO_REFERER,
-    })
-    r.raise_for_status()
-    root = ET.fromstring(r.content)
+    try:
+        r = requests.post(SEIBRO_URL, data=xml.encode("utf-8"), timeout=SEIBRO_TIMEOUT, headers={
+            **UA, "Content-Type": "application/xml; charset=UTF-8", "Referer": SEIBRO_REFERER,
+        })
+    except requests.exceptions.ConnectTimeout:
+        raise RuntimeError("SEIBro 서버가 연결에 응답하지 않습니다 (이 서버의 IP를 막고 있을 가능성이 큽니다)")
+    except requests.exceptions.ReadTimeout:
+        raise RuntimeError("SEIBro 서버가 연결은 받았지만 응답을 보내지 않습니다")
+    except requests.exceptions.ConnectionError as e:
+        raise RuntimeError(f"SEIBro 서버에 연결하지 못했습니다: {type(e).__name__}")
+    if r.status_code != 200:
+        raise RuntimeError(f"SEIBro가 HTTP {r.status_code} 오류를 돌려줬습니다")
+    try:
+        root = ET.fromstring(r.content)
+    except ET.ParseError:
+        snippet = r.text[:150].replace("\n", " ")
+        raise RuntimeError(f"SEIBro 응답이 예상한 XML이 아닙니다: {snippet}")
     rows = []
     for res in root.iter("result"):
         v = {c.tag: c.get("value") for c in res}
@@ -631,27 +647,74 @@ def _seibro_net(start: date, end: date) -> list:
                    END_DT=end.strftime("%Y%m%d"), S_TYPE="2", S_COUNTRY="US", D_TYPE="4")
 
 
-@st.cache_data(ttl=6 * 3600, show_spinner=False)
-def get_net_buy_top() -> dict:
-    """국내 투자자의 미국 주식 순매수 상위 50 (1주·1개월). 결제 기준이라 하루 늦게 반영된다.
-    반환: {"1w": {"start", "end", "rows"}, "1m": {...}}"""
+def fetch_net_buy_live() -> dict:
+    """SEIBro에서 직접 받기. 최근 평일 5일을 동시에 조회해 데이터가 있는 가장 최근 결제일을 고른다."""
     kst_today = pd.Timestamp.now(tz="Asia/Seoul").date()
-    end, rows_1w = None, []
-    day = kst_today - timedelta(days=1)
-    for _ in range(10):  # 데이터가 있는 가장 최근 결제일을 찾는다
-        if day.weekday() < 5:
-            rows_1w = _seibro_net(day - timedelta(days=6), day)
-            if rows_1w:
-                end = day
-                break
-        day -= timedelta(days=1)
-    if end is None:
-        raise RuntimeError("SEIBro에서 최근 10일 안의 순매수 데이터를 찾지 못했습니다.")
-    start_1m = end - timedelta(days=29)
-    return {
-        "1w": {"start": end - timedelta(days=6), "end": end, "rows": rows_1w},
-        "1m": {"start": start_1m, "end": end, "rows": _seibro_net(start_1m, end)},
-    }
+    days, d = [], kst_today - timedelta(days=1)
+    while len(days) < 5:
+        if d.weekday() < 5:
+            days.append(d)
+        d -= timedelta(days=1)
+    with ThreadPoolExecutor(max_workers=5) as ex:
+        results = list(ex.map(lambda day: _try(lambda: _seibro_net(day - timedelta(days=6), day)), days))
+    for day, res in zip(days, results):          # 최근 날짜부터
+        if isinstance(res, list) and res:
+            start_1m = day - timedelta(days=29)
+            return {
+                "1w": {"start": day - timedelta(days=6), "end": day, "rows": res},
+                "1m": {"start": start_1m, "end": day, "rows": _seibro_net(start_1m, day)},
+            }
+    errors = [r for r in results if isinstance(r, Exception)]
+    if errors:
+        raise errors[0]
+    raise RuntimeError("SEIBro에서 최근 5영업일의 순매수 데이터를 찾지 못했습니다")
+
+
+def _try(fn):
+    try:
+        return fn()
+    except Exception as e:
+        return e
+
+
+def load_net_buy_snapshot():
+    """GitHub Actions가 저장해 둔 파일 (snapshots/net_buy.json). 없으면 None."""
+    try:
+        raw = json.loads(SNAPSHOT_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    out = {"updated": raw.get("updated")}
+    for k in ("1w", "1m"):
+        v = raw[k]
+        out[k] = {"start": date.fromisoformat(v["start"]), "end": date.fromisoformat(v["end"]), "rows": v["rows"]}
+    return out
+
+
+@st.cache_data(ttl=6 * 3600, show_spinner=False)
+def _net_buy_live_cached():
+    """성공한 결과는 6시간 캐싱."""
+    return fetch_net_buy_live()
+
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def _net_buy_attempt():
+    """실패도 30분 동안 기억해서, 막혀 있을 때 버튼을 누를 때마다 다시 기다리지 않게 한다."""
+    try:
+        return _net_buy_live_cached(), None
+    except Exception as e:
+        return None, str(e)
+
+
+def get_net_buy_top() -> dict:
+    """국내 투자자의 미국 주식 순매수 상위 50 (1주·1개월).
+    SEIBro 직접 조회 → 실패하면 GitHub Actions 저장본. 반환에 source·live_error가 붙는다."""
+    live, err = _net_buy_attempt()
+    if live:
+        return {**live, "source": "SEIBro 실시간 조회", "live_error": None}
+    snap = load_net_buy_snapshot()
+    if snap:
+        return {**snap, "source": f"GitHub Actions 저장본 ({snap.get('updated', '')})", "live_error": err}
+    raise RuntimeError(f"{err}. 저장본(snapshots/net_buy.json)도 없습니다.")
 
 
 @st.cache_data(ttl=7 * 86400, show_spinner=False)
@@ -685,10 +748,13 @@ def isin_to_ticker(isins: tuple) -> dict:
 
 
 def attach_tickers(rows: list) -> list:
-    isins = tuple(dict.fromkeys(i for r in rows for i in r["isins"]))
-    mapping = isin_to_ticker(isins)
-    for r in rows:
-        r["ticker"] = next((mapping[i] for i in r["isins"] if mapping.get(i)), None)
+    """티커가 아직 없는 행만 ISIN으로 찾는다 (저장본에는 티커가 이미 들어 있다)."""
+    todo = [r for r in rows if not r.get("ticker")]
+    if todo:
+        isins = tuple(dict.fromkeys(i for r in todo for i in r.get("isins") or [r["isin"]]))
+        mapping = isin_to_ticker(isins)
+        for r in todo:
+            r["ticker"] = next((mapping[i] for i in r.get("isins") or [r["isin"]] if mapping.get(i)), None)
     return rows
 
 

@@ -34,3 +34,10 @@ streamlit run app.py
 기본은 Google 번역입니다. Claude API 키를 넣으면 금융 용어에 맞춘 번역으로 바뀝니다.
 - 로컬: `.streamlit/secrets.toml` 파일에 `ANTHROPIC_API_KEY = "sk-ant-..."`
 - Streamlit Cloud: 앱 Settings → Secrets 에 같은 줄 추가
+
+## 국내 순매수 TOP10 자동 갱신 (GitHub Actions)
+Streamlit Cloud 서버에서 SEIBro 접속이 막힐 수 있어서, GitHub Actions가 평일 하루 두 번
+SEIBro 데이터를 받아 `snapshots/net_buy.json`으로 커밋합니다. 앱은 실시간 조회가 실패하면 이 파일을 씁니다.
+- 필요한 파일: `.github/workflows/net_buy.yml`, `scripts/fetch_net_buy.py`, `snapshots/net_buy.json`
+- 처음 한 번: 저장소 Actions 탭 → "SEIBro 순매수 저장" → Run workflow
+- 커밋이 실패하면: 저장소 Settings → Actions → General → Workflow permissions → Read and write permissions
