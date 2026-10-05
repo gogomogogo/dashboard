@@ -690,31 +690,16 @@ def load_net_buy_snapshot():
     return out
 
 
-@st.cache_data(ttl=6 * 3600, show_spinner=False)
-def _net_buy_live_cached():
-    """성공한 결과는 6시간 캐싱."""
-    return fetch_net_buy_live()
-
-
-@st.cache_data(ttl=1800, show_spinner=False)
-def _net_buy_attempt():
-    """실패도 30분 동안 기억해서, 막혀 있을 때 버튼을 누를 때마다 다시 기다리지 않게 한다."""
-    try:
-        return _net_buy_live_cached(), None
-    except Exception as e:
-        return None, str(e)
-
-
+@st.cache_data(ttl=600, show_spinner=False)
 def get_net_buy_top() -> dict:
-    """국내 투자자의 미국 주식 순매수 상위 50 (1주·1개월).
-    SEIBro 직접 조회 → 실패하면 GitHub Actions 저장본. 반환에 source·live_error가 붙는다."""
-    live, err = _net_buy_attempt()
-    if live:
-        return {**live, "source": "SEIBro 실시간 조회", "live_error": None}
+    """국내 투자자의 미국 주식 순매수 상위 (1주·1개월).
+    웹페이지는 SEIBro에 직접 접속하지 않고, GitHub Actions가 받아 둔 snapshots/net_buy.json만 읽는다.
+    (Streamlit Cloud 서버에서는 SEIBro 접속이 막혀 있다.)"""
     snap = load_net_buy_snapshot()
-    if snap:
-        return {**snap, "source": f"GitHub Actions 저장본 ({snap.get('updated', '')})", "live_error": err}
-    raise RuntimeError(f"{err}. 저장본(snapshots/net_buy.json)도 없습니다.")
+    if not snap:
+        raise RuntimeError("저장본(snapshots/net_buy.json)이 없습니다. 저장소 Actions 탭에서 "
+                           "'SEIBro 순매수 저장'을 한 번 실행해 주세요.")
+    return snap
 
 
 @st.cache_data(ttl=7 * 86400, show_spinner=False)
@@ -736,15 +721,32 @@ def isin_to_ticker(isins: tuple) -> dict:
     for c in isins:
         if c in out:
             continue
-        try:
-            r = requests.get("https://query2.finance.yahoo.com/v1/finance/search", headers=UA, timeout=10,
-                             params={"q": c, "quotesCount": 1, "newsCount": 0})
-            quotes = r.json().get("quotes") or []
-            if quotes and quotes[0].get("symbol"):
-                out[c] = quotes[0]["symbol"]
-        except Exception:
-            pass
+        q = yahoo_search(c)
+        if q:
+            out[c] = q["symbol"]
     return out
+
+
+US_EXCHANGES = {"NMS", "NYQ", "NGM", "NCM", "PCX", "ASE", "BTS", "NAS", "NYS", "PNK", "CXI"}
+
+
+def yahoo_search(query: str, exact: str | None = None):
+    """Yahoo 검색에서 미국 상장 종목 하나 (런던 0LO6.L 같은 해외 상장은 제외). 없으면 None."""
+    try:
+        r = requests.get("https://query2.finance.yahoo.com/v1/finance/search", headers=UA, timeout=10,
+                         params={"q": query, "quotesCount": 8, "newsCount": 0})
+        quotes = r.json().get("quotes") or []
+    except Exception:
+        return None
+    us = [q for q in quotes if q.get("symbol") and "." not in q["symbol"]
+          and (q.get("exchange") in US_EXCHANGES or not q.get("exchange"))]
+    if exact:
+        us = [q for q in us if q["symbol"].upper() == exact.upper()]
+    return us[0] if us else None
+
+
+def is_us_ticker(t) -> bool:
+    return bool(t) and "." not in str(t)
 
 
 def attach_tickers(rows: list) -> list:
