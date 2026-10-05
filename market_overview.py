@@ -143,27 +143,6 @@ try:
 except Exception as e:
     st.error(f"섹터 데이터를 불러오지 못했습니다: {e}")
 
-# ---------------------------------------------------------------- 국내 순매수 TOP10
-RANK_COLORS = ["#3f7be0", "#e5604d", "#1e8e4e", "#e0a43a", "#9b7fe6",
-               "#5cc9a7", "#d17fb5", "#8d6e4f", "#7a9cc6", "#b5b84a"]
-
-
-def _usd(v):
-    if v is None or pd.isna(v):
-        return "-"
-    return f"${v / 1e9:,.2f}B" if abs(v) >= 1e9 else f"${v / 1e6:,.1f}M"
-
-
-def _krw(v, rate):
-    if v is None or pd.isna(v) or not rate:
-        return "-"
-    won = v * rate
-    return f"{won / 1e12:,.2f}조원" if abs(won) >= 1e12 else f"{won / 1e8:,.0f}억원"
-
-
-st.subheader("국내 순매수 TOP10")
-netbuy_slot = st.container()  # 응답이 느릴 수 있어 맨 마지막에 채운다
-
 # ---------------------------------------------------------------- 주요 이슈
 def _md(text: str) -> str:
     """마크다운에서 깨지는 문자 정리 ($는 수식, []는 링크로 해석됨)."""
@@ -246,74 +225,3 @@ with issues_slot:
             st.caption(note)
     except Exception as e:
         st.error(f"주요 이슈를 불러오지 못했습니다: {e}")
-
-# ---------------------------------------------------------------- 국내 순매수 채우기
-with netbuy_slot:
-    try:
-        h1, h2 = st.columns([3, 1], vertical_alignment="center")
-        nb_span = h2.segmented_control("기간", ["1주", "1개월"], default="1주",
-                                       key="netbuy_span", label_visibility="collapsed") or "1주"
-        with st.spinner("순매수 순위를 불러오는 중"):
-            nb_all = data.get_net_buy_top()
-            nb = nb_all["1w" if nb_span == "1주" else "1m"]
-            rows = [dict(r) for r in nb["rows"][:10]]
-        for r in rows:  # 미국 상장 티커가 아닌 잘못된 연결은 비워 둔다
-            if not data.is_us_ticker(r.get("ticker")):
-                r["ticker"] = None
-            tickers = tuple(r["ticker"] for r in rows if r["ticker"])
-            closes = data.get_closes_3mo(tickers) if tickers else pd.DataFrame()
-        h1.caption(
-            f"국내 투자자가 {nb['start']:%m/%d}~{nb['end']:%m/%d} 동안 가장 많이 순매수한 미국 주식과, "
-            "같은 기간의 주가 변동입니다. 예탁결제원 결제 기준이라 하루 늦게 반영됩니다."
-        )
-        pct = data.returns_since(closes, nb["start"]) if not closes.empty else pd.DataFrame()
-
-        try:
-            rate = float(data.get_usdkrw().iloc[-1])
-        except Exception:
-            rate = None
-        table = []
-        for i, r in enumerate(rows):
-            t = r["ticker"]
-            ret = float(pct[t].dropna().iloc[-1]) if t and t in pct and pct[t].notna().any() else None
-            table.append({
-                "순위": r["rank"],
-                "종목": f"/stock?ticker={t}" if t else None,
-                "이름": r.get("display_name") or r["name"],
-                "순매수": _usd(r["net"]),
-                "원화 환산": _krw(r["net"], rate),
-                "기간 등락률": ret,
-            })
-
-        g, tb = st.columns([1.45, 1.3])
-        with g:
-            if not pct.empty:
-                colors = {r["ticker"]: RANK_COLORS[i] for i, r in enumerate(rows) if r["ticker"]}
-                fig = charts.sector_chart(pct, {}, n_lead=3, height=430, colors=colors, label=lambda t: t)
-                st.plotly_chart(fig, width="stretch", theme=None,
-                                config={"displaylogo": False, "displayModeBar": False})
-            else:
-                st.info("주가 데이터를 불러오지 못했습니다.")
-        with tb:
-            df_t = pd.DataFrame(table)
-            styled = df_t.style.map(
-                lambda v: "" if v is None or pd.isna(v) else f"color: {'#1e8e4e' if v >= 0 else '#c0392b'}",
-                subset=["기간 등락률"],
-            ).format({"기간 등락률": lambda v: "-" if v is None or pd.isna(v) else f"{v:+.2f}%"})
-            st.dataframe(
-                styled, hide_index=True, width="stretch", height=394,
-                column_config={
-                    "순위": st.column_config.NumberColumn(width=45),
-                    "종목": st.column_config.LinkColumn(display_text=r"ticker=(.*)", width=70,
-                                                       help="누르면 종목 분석이 열립니다"),
-                    "이름": st.column_config.TextColumn(width="medium"),
-                },
-            )
-            st.caption(f"출처 한국예탁결제원 SEIBro · {nb_all.get('updated', '')} 수집 · "
-                       "원화 환산은 현재 환율 기준 · 굵은 선은 기간 등락률 상위 3개")
-            age = (pd.Timestamp.now(tz="Asia/Seoul").date() - nb["end"]).days
-            if age > 5:
-                st.caption(f":orange[데이터가 {age}일 전 기준입니다. 저장소 Actions의 'SEIBro 순매수 저장'이 "
-                           "정상적으로 돌고 있는지 확인해 주세요.]")
-    except Exception as e:
-        st.error(f"국내 순매수 데이터를 불러오지 못했습니다: {e}")
