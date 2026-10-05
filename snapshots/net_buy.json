@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-05 18:02 KST",
+ "updated": "2026-10-05 18:17 KST",
  "1w": {
   "start": "2026-09-26",
   "end": "2026-10-02",
@@ -14,7 +14,8 @@
     "buy": 98673402.0,
     "sell": 39396384.0,
     "net": 59277018.0,
-    "ticker": "TSLA"
+    "ticker": "TSLA",
+    "display_name": "Tesla, Inc."
    },
    {
     "rank": 2,
@@ -26,7 +27,8 @@
     "buy": 71089263.0,
     "sell": 16884505.0,
     "net": 54204758.0,
-    "ticker": "SNDK"
+    "ticker": "SNDK",
+    "display_name": "Sandisk Corporation"
    },
    {
     "rank": 3,
@@ -39,7 +41,8 @@
     "buy": 76144976.0,
     "sell": 28285272.0,
     "net": 47859704.0,
-    "ticker": "KORU"
+    "ticker": "KORU",
+    "display_name": "Direxion Daily South Korea Bull 3X Shares"
    },
    {
     "rank": 4,
@@ -51,7 +54,8 @@
     "buy": 79652198.0,
     "sell": 34918812.0,
     "net": 44733386.0,
-    "ticker": "META"
+    "ticker": "META",
+    "display_name": "Meta Platforms, Inc."
    },
    {
     "rank": 5,
@@ -63,7 +67,8 @@
     "buy": 50166474.0,
     "sell": 5596406.0,
     "net": 44570068.0,
-    "ticker": "SCHD"
+    "ticker": "SCHD",
+    "display_name": "Schwab U.S. Dividend Equity ETF"
    },
    {
     "rank": 6,
@@ -76,7 +81,8 @@
     "buy": 45430277.0,
     "sell": 4693889.0,
     "net": 40736388.0,
-    "ticker": "0LO6.L"
+    "ticker": "VOO",
+    "display_name": "Vanguard S&P 500 ETF"
    },
    {
     "rank": 7,
@@ -88,7 +94,8 @@
     "buy": 59761315.0,
     "sell": 23701144.0,
     "net": 36060170.0,
-    "ticker": "SPCX"
+    "ticker": "SPCX",
+    "display_name": "Space Exploration Technologies Corp."
    },
    {
     "rank": 8,
@@ -100,7 +107,8 @@
     "buy": 107520474.0,
     "sell": 72657429.0,
     "net": 34863045.0,
-    "ticker": "MU"
+    "ticker": "MU",
+    "display_name": "Micron Technology, Inc."
    },
    {
     "rank": 9,
@@ -112,7 +120,8 @@
     "buy": 63938409.0,
     "sell": 31367445.0,
     "net": 32570964.0,
-    "ticker": "GOOGL"
+    "ticker": "GOOGL",
+    "display_name": "Alphabet Inc."
    },
    {
     "rank": 10,
@@ -124,7 +133,8 @@
     "buy": 32779307.0,
     "sell": 694875.0,
     "net": 32084432.0,
-    "ticker": "JEPQ"
+    "ticker": "JEPQ",
+    "display_name": "JPMorgan Nasdaq Equity Premium Income ETF"
    },
    {
     "rank": 11,
@@ -136,7 +146,8 @@
     "buy": 37091219.0,
     "sell": 5903954.0,
     "net": 31187265.0,
-    "ticker": "TLT"
+    "ticker": "TLT",
+    "display_name": "iShares 20+ Year Treasury Bond ETF"
    },
    {
     "rank": 12,
@@ -149,7 +160,8 @@
     "buy": 37285143.0,
     "sell": 7638601.0,
     "net": 29646542.0,
-    "ticker": "UNS1.F"
+    "ticker": "LITE",
+    "display_name": "Lumentum Holdings Inc."
    },
    {
     "rank": 13,
@@ -161,7 +173,8 @@
     "buy": 31824028.0,
     "sell": 3655343.0,
     "net": 28168685.0,
-    "ticker": "QQQM"
+    "ticker": "QQQM",
+    "display_name": "Invesco NASDAQ 100 ETF"
    },
    {
     "rank": 14,
@@ -173,7 +186,8 @@
     "buy": 30990488.0,
     "sell": 3588859.0,
     "net": 27401629.0,
-    "ticker": "QLD"
+    "ticker": "QLD",
+    "display_name": "ProShares Ultra QQQ"
    },
    {
     "rank": 15,
@@ -185,7 +199,8 @@
     "buy": 49023512.0,
     "sell": 22147429.0,
     "net": 26876083.0,
-    "ticker": "TQQQ"
+    "ticker": "TQQQ",
+    "display_name": "ProShares UltraPro QQQ"
    },
    {
     "rank": 16,
@@ -197,7 +212,8 @@
     "buy": 28174343.0,
     "sell": 2431607.0,
     "net": 25742735.0,
-    "ticker": "IREN"
+    "ticker": "IREN",
+    "display_name": "IREN Limited"
    },
    {
     "rank": 17,
@@ -209,7 +225,8 @@
     "buy": 28366572.0,
     "sell": 3280530.0,
     "net": 25086041.0,
-    "ticker": "GDXU"
+    "ticker": "GDXU",
+    "display_name": "MicroSectors Gold Miners 3X Leveraged ETNs"
    },
    {
     "rank": 18,
@@ -221,7 +238,8 @@
     "buy": 20870562.0,
     "sell": 130437.0,
     "net": 20740125.0,
-    "ticker": "TWST"
+    "ticker": "TWST",
+    "display_name": "Twist Bioscience Corporation"
    },
    {
     "rank": 19,
@@ -233,7 +251,8 @@
     "buy": 37961630.0,
     "sell": 17425218.0,
     "net": 20536412.0,
-    "ticker": "AMD"
+    "ticker": "AMD",
+    "display_name": "Advanced Micro Devices, Inc."
    },
    {
     "rank": 20,
@@ -245,7 +264,8 @@
     "buy": 29934749.0,
     "sell": 10286428.0,
     "net": 19648321.0,
-    "ticker": "ORCL"
+    "ticker": "ORCL",
+    "display_name": "Oracle Corporation"
    },
    {
     "rank": 21,
@@ -258,7 +278,8 @@
     "buy": 20343601.0,
     "sell": 1033681.0,
     "net": 19309920.0,
-    "ticker": "TMF"
+    "ticker": "TMF",
+    "display_name": "Direxion Daily 20+ Year Treasury Bull 3X Shares"
    },
    {
     "rank": 22,
@@ -270,7 +291,8 @@
     "buy": 17376235.0,
     "sell": 680359.0,
     "net": 16695876.0,
-    "ticker": "SPYM"
+    "ticker": "SPYM",
+    "display_name": "State Street SPDR Portfolio S&P 500 ETF"
    },
    {
     "rank": 23,
@@ -282,7 +304,8 @@
     "buy": 15806559.0,
     "sell": 869390.0,
     "net": 14937169.0,
-    "ticker": "O"
+    "ticker": "O",
+    "display_name": "Realty Income Corporation"
    },
    {
     "rank": 24,
@@ -294,7 +317,8 @@
     "buy": 21287173.0,
     "sell": 7066125.0,
     "net": 14221048.0,
-    "ticker": "QQQ"
+    "ticker": "QQQ",
+    "display_name": "Invesco QQQ Trust"
    },
    {
     "rank": 25,
@@ -306,7 +330,8 @@
     "buy": 18232336.0,
     "sell": 5828345.0,
     "net": 12403991.0,
-    "ticker": "TSLL"
+    "ticker": "TSLL",
+    "display_name": "Direxion Daily TSLA Bull 2X Shares"
    },
    {
     "rank": 26,
@@ -318,7 +343,8 @@
     "buy": 11772871.0,
     "sell": 2081.0,
     "net": 11770790.0,
-    "ticker": "FIGS"
+    "ticker": "FIGS",
+    "display_name": "FIGS, Inc."
    },
    {
     "rank": 27,
@@ -330,7 +356,8 @@
     "buy": 13521844.0,
     "sell": 1897559.0,
     "net": 11624285.0,
-    "ticker": "SMR"
+    "ticker": "SMR",
+    "display_name": "NuScale Power Corporation"
    },
    {
     "rank": 28,
@@ -342,7 +369,8 @@
     "buy": 22388176.0,
     "sell": 11030893.0,
     "net": 11357282.0,
-    "ticker": "AVGO"
+    "ticker": "AVGO",
+    "display_name": "Broadcom Inc."
    },
    {
     "rank": 29,
@@ -355,7 +383,8 @@
     "buy": 14466761.0,
     "sell": 3472399.0,
     "net": 10994362.0,
-    "ticker": "GOOG"
+    "ticker": "GOOG",
+    "display_name": "Alphabet Inc."
    },
    {
     "rank": 30,
@@ -367,7 +396,8 @@
     "buy": 14001997.0,
     "sell": 3161594.0,
     "net": 10840403.0,
-    "ticker": "SPY"
+    "ticker": "SPY",
+    "display_name": "State Street SPDR S&P 500 ETF Trust"
    },
    {
     "rank": 31,
@@ -379,7 +409,8 @@
     "buy": 15835268.0,
     "sell": 5983572.0,
     "net": 9851696.0,
-    "ticker": "CRCL"
+    "ticker": "CRCL",
+    "display_name": "Circle Internet Group"
    },
    {
     "rank": 32,
@@ -391,7 +422,8 @@
     "buy": 12155776.0,
     "sell": 2421851.0,
     "net": 9733925.0,
-    "ticker": "PANW"
+    "ticker": "PANW",
+    "display_name": "Palo Alto Networks, Inc."
    },
    {
     "rank": 33,
@@ -403,7 +435,8 @@
     "buy": 8975985.0,
     "sell": 280554.0,
     "net": 8695430.0,
-    "ticker": "GPIQ"
+    "ticker": "GPIQ",
+    "display_name": "Goldman Sachs Nasdaq-100 Premium Income ETF"
    },
    {
     "rank": 34,
@@ -415,7 +448,8 @@
     "buy": 8847713.0,
     "sell": 426287.0,
     "net": 8421426.0,
-    "ticker": "JBL"
+    "ticker": "JBL",
+    "display_name": "Jabil Inc."
    },
    {
     "rank": 35,
@@ -427,7 +461,8 @@
     "buy": 14784935.0,
     "sell": 6523716.0,
     "net": 8261219.0,
-    "ticker": "BOXX"
+    "ticker": "BOXX",
+    "display_name": "Alpha Architect 1-3 Month Box ETF"
    },
    {
     "rank": 36,
@@ -439,7 +474,8 @@
     "buy": 9037259.0,
     "sell": 835372.0,
     "net": 8201887.0,
-    "ticker": "FSLR"
+    "ticker": "FSLR",
+    "display_name": "First Solar, Inc."
    },
    {
     "rank": 37,
@@ -451,7 +487,8 @@
     "buy": 8456852.0,
     "sell": 393694.0,
     "net": 8063159.0,
-    "ticker": "SDGR"
+    "ticker": "SDGR",
+    "display_name": "Schrödinger, Inc."
    },
    {
     "rank": 38,
@@ -464,7 +501,8 @@
     "buy": 8155523.0,
     "sell": 287281.0,
     "net": 7868242.0,
-    "ticker": "4OQ1.F"
+    "ticker": "AGNC",
+    "display_name": "AGNC Investment Corp."
    },
    {
     "rank": 39,
@@ -476,7 +514,8 @@
     "buy": 8999832.0,
     "sell": 1162657.0,
     "net": 7837175.0,
-    "ticker": "OKTA"
+    "ticker": "OKTA",
+    "display_name": "Okta, Inc."
    },
    {
     "rank": 40,
@@ -488,7 +527,8 @@
     "buy": 8652130.0,
     "sell": 857831.0,
     "net": 7794299.0,
-    "ticker": "SNXX"
+    "ticker": "SNXX",
+    "display_name": "Tradr 2X Long Sndk Daily ETF"
    },
    {
     "rank": 41,
@@ -501,7 +541,8 @@
     "buy": 11214405.0,
     "sell": 3512325.0,
     "net": 7702079.0,
-    "ticker": "ASST"
+    "ticker": "ASST",
+    "display_name": "Strive, Inc."
    },
    {
     "rank": 42,
@@ -514,7 +555,8 @@
     "buy": 9757722.0,
     "sell": 2752789.0,
     "net": 7004933.0,
-    "ticker": "COHR"
+    "ticker": "COHR",
+    "display_name": "Coherent Corp."
    },
    {
     "rank": 43,
@@ -526,7 +568,8 @@
     "buy": 7140057.0,
     "sell": 750233.0,
     "net": 6389824.0,
-    "ticker": "PLUG"
+    "ticker": "PLUG",
+    "display_name": "Plug Power Inc."
    },
    {
     "rank": 44,
@@ -538,7 +581,8 @@
     "buy": 43162272.0,
     "sell": 36857322.0,
     "net": 6304951.0,
-    "ticker": "INTC"
+    "ticker": "INTC",
+    "display_name": "Intel Corporation"
    },
    {
     "rank": 45,
@@ -550,7 +594,8 @@
     "buy": 7520500.0,
     "sell": 1469618.0,
     "net": 6050882.0,
-    "ticker": "MCD"
+    "ticker": "MCD",
+    "display_name": "McDonald's Corporation"
    },
    {
     "rank": 46,
@@ -562,7 +607,8 @@
     "buy": 8547514.0,
     "sell": 2605973.0,
     "net": 5941542.0,
-    "ticker": "COIN"
+    "ticker": "COIN",
+    "display_name": "Coinbase Global, Inc."
    },
    {
     "rank": 47,
@@ -574,7 +620,8 @@
     "buy": 6338866.0,
     "sell": 635293.0,
     "net": 5703573.0,
-    "ticker": "KO"
+    "ticker": "KO",
+    "display_name": "The Coca-Cola Company"
    },
    {
     "rank": 48,
@@ -586,7 +633,8 @@
     "buy": 6745748.0,
     "sell": 1094082.0,
     "net": 5651666.0,
-    "ticker": "JEPI"
+    "ticker": "JEPI",
+    "display_name": "JPMorgan Equity Premium Income ETF"
    },
    {
     "rank": 49,
@@ -598,7 +646,8 @@
     "buy": 6837245.0,
     "sell": 1193496.0,
     "net": 5643749.0,
-    "ticker": "BRK-B"
+    "ticker": "BRK-B",
+    "display_name": "Berkshire Hathaway Inc."
    },
    {
     "rank": 50,
@@ -610,7 +659,8 @@
     "buy": 20189492.0,
     "sell": 14598017.0,
     "net": 5591475.0,
-    "ticker": "MSTR"
+    "ticker": "MSTR",
+    "display_name": "Strategy Inc"
    }
   ]
  },
@@ -628,7 +678,8 @@
     "buy": 339988999.0,
     "sell": 67247270.0,
     "net": 272741729.0,
-    "ticker": "SGOV"
+    "ticker": "SGOV",
+    "display_name": "iShares 0-3 Month Treasury Bond ETF"
    },
    {
     "rank": 2,
@@ -640,7 +691,8 @@
     "buy": 299994283.0,
     "sell": 58594083.0,
     "net": 241400200.0,
-    "ticker": "SCHD"
+    "ticker": "SCHD",
+    "display_name": "Schwab U.S. Dividend Equity ETF"
    },
    {
     "rank": 3,
@@ -653,7 +705,8 @@
     "buy": 209525907.0,
     "sell": 23992041.0,
     "net": 185533867.0,
-    "ticker": "0LO6.L"
+    "ticker": "VOO",
+    "display_name": "Vanguard S&P 500 ETF"
    },
    {
     "rank": 4,
@@ -665,7 +718,8 @@
     "buy": 341996006.0,
     "sell": 161846152.0,
     "net": 180149854.0,
-    "ticker": "GOOGL"
+    "ticker": "GOOGL",
+    "display_name": "Alphabet Inc."
    },
    {
     "rank": 5,
@@ -678,7 +732,8 @@
     "buy": 410704818.0,
     "sell": 255367136.0,
     "net": 155337683.0,
-    "ticker": "SOXS"
+    "ticker": "SOXS",
+    "display_name": "Direxion Daily Semiconductor Bear 3X Shares"
    },
    {
     "rank": 6,
@@ -690,7 +745,8 @@
     "buy": 165451559.0,
     "sell": 29310505.0,
     "net": 136141054.0,
-    "ticker": "QQQM"
+    "ticker": "QQQM",
+    "display_name": "Invesco NASDAQ 100 ETF"
    },
    {
     "rank": 7,
@@ -702,7 +758,8 @@
     "buy": 177170545.0,
     "sell": 59891101.0,
     "net": 117279444.0,
-    "ticker": "AMZN"
+    "ticker": "AMZN",
+    "display_name": "Amazon.com, Inc."
    },
    {
     "rank": 8,
@@ -714,7 +771,8 @@
     "buy": 121780203.0,
     "sell": 12446996.0,
     "net": 109333207.0,
-    "ticker": "PANW"
+    "ticker": "PANW",
+    "display_name": "Palo Alto Networks, Inc."
    },
    {
     "rank": 9,
@@ -726,7 +784,8 @@
     "buy": 185196164.0,
     "sell": 78255672.0,
     "net": 106940492.0,
-    "ticker": "AVGO"
+    "ticker": "AVGO",
+    "display_name": "Broadcom Inc."
    },
    {
     "rank": 10,
@@ -738,7 +797,8 @@
     "buy": 133727634.0,
     "sell": 28499494.0,
     "net": 105228140.0,
-    "ticker": "QLD"
+    "ticker": "QLD",
+    "display_name": "ProShares Ultra QQQ"
    },
    {
     "rank": 11,
@@ -750,7 +810,8 @@
     "buy": 233263375.0,
     "sell": 128352413.0,
     "net": 104910962.0,
-    "ticker": "SPCX"
+    "ticker": "SPCX",
+    "display_name": "Space Exploration Technologies Corp."
    },
    {
     "rank": 12,
@@ -762,7 +823,8 @@
     "buy": 113313457.0,
     "sell": 12885182.0,
     "net": 100428275.0,
-    "ticker": "JEPQ"
+    "ticker": "JEPQ",
+    "display_name": "JPMorgan Nasdaq Equity Premium Income ETF"
    },
    {
     "rank": 13,
@@ -774,7 +836,8 @@
     "buy": 80327284.0,
     "sell": 3181004.0,
     "net": 77146279.0,
-    "ticker": "SPYM"
+    "ticker": "SPYM",
+    "display_name": "State Street SPDR Portfolio S&P 500 ETF"
    },
    {
     "rank": 14,
@@ -787,7 +850,8 @@
     "buy": 140801402.0,
     "sell": 64018233.0,
     "net": 76783169.0,
-    "ticker": "UNS1.F"
+    "ticker": "LITE",
+    "display_name": "Lumentum Holdings Inc."
    },
    {
     "rank": 15,
@@ -799,7 +863,8 @@
     "buy": 130430419.0,
     "sell": 53719324.0,
     "net": 76711095.0,
-    "ticker": "ORCL"
+    "ticker": "ORCL",
+    "display_name": "Oracle Corporation"
    },
    {
     "rank": 16,
@@ -811,7 +876,8 @@
     "buy": 198192570.0,
     "sell": 125338963.0,
     "net": 72853607.0,
-    "ticker": "IONQ"
+    "ticker": "IONQ",
+    "display_name": "IonQ, Inc."
    },
    {
     "rank": 17,
@@ -823,7 +889,8 @@
     "buy": 120172980.0,
     "sell": 50187514.0,
     "net": 69985466.0,
-    "ticker": "QQQ"
+    "ticker": "QQQ",
+    "display_name": "Invesco QQQ Trust"
    },
    {
     "rank": 18,
@@ -835,7 +902,8 @@
     "buy": 119474345.0,
     "sell": 57780351.0,
     "net": 61693994.0,
-    "ticker": "NBIS"
+    "ticker": "NBIS",
+    "display_name": "Nebius Group N.V."
    },
    {
     "rank": 19,
@@ -847,7 +915,8 @@
     "buy": 130901525.0,
     "sell": 78148012.0,
     "net": 52753513.0,
-    "ticker": "TSM"
+    "ticker": "TSM",
+    "display_name": "Taiwan Semiconductor Manufacturing Company Limited"
    },
    {
     "rank": 20,
@@ -859,7 +928,8 @@
     "buy": 57135917.0,
     "sell": 8989309.0,
     "net": 48146608.0,
-    "ticker": "MRK"
+    "ticker": "MRK",
+    "display_name": "Merck & Co., Inc."
    },
    {
     "rank": 21,
@@ -871,7 +941,8 @@
     "buy": 74220121.0,
     "sell": 27208713.0,
     "net": 47011408.0,
-    "ticker": "GDXU"
+    "ticker": "GDXU",
+    "display_name": "MicroSectors Gold Miners 3X Leveraged ETNs"
    },
    {
     "rank": 22,
@@ -883,7 +954,8 @@
     "buy": 53976958.0,
     "sell": 7071166.0,
     "net": 46905792.0,
-    "ticker": "O"
+    "ticker": "O",
+    "display_name": "Realty Income Corporation"
    },
    {
     "rank": 23,
@@ -895,7 +967,8 @@
     "buy": 69988401.0,
     "sell": 23800197.0,
     "net": 46188204.0,
-    "ticker": "TLT"
+    "ticker": "TLT",
+    "display_name": "iShares 20+ Year Treasury Bond ETF"
    },
    {
     "rank": 24,
@@ -907,7 +980,8 @@
     "buy": 77363480.0,
     "sell": 35674468.0,
     "net": 41689012.0,
-    "ticker": "BOXX"
+    "ticker": "BOXX",
+    "display_name": "Alpha Architect 1-3 Month Box ETF"
    },
    {
     "rank": 25,
@@ -919,7 +993,8 @@
     "buy": 153031438.0,
     "sell": 111585075.0,
     "net": 41446363.0,
-    "ticker": "SOXX"
+    "ticker": "SOXX",
+    "display_name": "iShares Semiconductor ETF"
    },
    {
     "rank": 26,
@@ -932,7 +1007,8 @@
     "buy": 82666788.0,
     "sell": 42095005.0,
     "net": 40571783.0,
-    "ticker": "DELL"
+    "ticker": "DELL",
+    "display_name": "Dell Technologies Inc."
    },
    {
     "rank": 27,
@@ -944,7 +1020,8 @@
     "buy": 47023744.0,
     "sell": 7367009.0,
     "net": 39656735.0,
-    "ticker": "NET"
+    "ticker": "NET",
+    "display_name": "Cloudflare, Inc."
    },
    {
     "rank": 28,
@@ -956,7 +1033,8 @@
     "buy": 150819424.0,
     "sell": 111749548.0,
     "net": 39069876.0,
-    "ticker": "MSTR"
+    "ticker": "MSTR",
+    "display_name": "Strategy Inc"
    },
    {
     "rank": 29,
@@ -968,7 +1046,8 @@
     "buy": 63495723.0,
     "sell": 24908559.0,
     "net": 38587164.0,
-    "ticker": "SPY"
+    "ticker": "SPY",
+    "display_name": "State Street SPDR S&P 500 ETF Trust"
    },
    {
     "rank": 30,
@@ -981,7 +1060,8 @@
     "buy": 64388426.0,
     "sell": 26317933.0,
     "net": 38070493.0,
-    "ticker": "GOOG"
+    "ticker": "GOOG",
+    "display_name": "Alphabet Inc."
    },
    {
     "rank": 31,
@@ -993,7 +1073,8 @@
     "buy": 232251055.0,
     "sell": 194401357.0,
     "net": 37849698.0,
-    "ticker": "META"
+    "ticker": "META",
+    "display_name": "Meta Platforms, Inc."
    },
    {
     "rank": 32,
@@ -1005,7 +1086,8 @@
     "buy": 389717570.0,
     "sell": 352473851.0,
     "net": 37243719.0,
-    "ticker": "TSLA"
+    "ticker": "TSLA",
+    "display_name": "Tesla, Inc."
    },
    {
     "rank": 33,
@@ -1017,7 +1099,8 @@
     "buy": 37143450.0,
     "sell": 2589396.0,
     "net": 34554054.0,
-    "ticker": "TWST"
+    "ticker": "TWST",
+    "display_name": "Twist Bioscience Corporation"
    },
    {
     "rank": 34,
@@ -1029,7 +1112,8 @@
     "buy": 37900651.0,
     "sell": 5212003.0,
     "net": 32688649.0,
-    "ticker": "MCD"
+    "ticker": "MCD",
+    "display_name": "McDonald's Corporation"
    },
    {
     "rank": 35,
@@ -1042,7 +1126,8 @@
     "buy": 51729081.0,
     "sell": 19622924.0,
     "net": 32106157.0,
-    "ticker": "TMF"
+    "ticker": "TMF",
+    "display_name": "Direxion Daily 20+ Year Treasury Bull 3X Shares"
    },
    {
     "rank": 36,
@@ -1055,7 +1140,8 @@
     "buy": 30798474.0,
     "sell": 2000933.0,
     "net": 28797542.0,
-    "ticker": "4OQ1.F"
+    "ticker": "AGNC",
+    "display_name": "AGNC Investment Corp."
    },
    {
     "rank": 37,
@@ -1067,7 +1153,8 @@
     "buy": 39598550.0,
     "sell": 11084766.0,
     "net": 28513784.0,
-    "ticker": "BRK-B"
+    "ticker": "BRK-B",
+    "display_name": "Berkshire Hathaway Inc."
    },
    {
     "rank": 38,
@@ -1079,7 +1166,8 @@
     "buy": 33969073.0,
     "sell": 7126379.0,
     "net": 26842694.0,
-    "ticker": "CPNG"
+    "ticker": "CPNG",
+    "display_name": "Coupang, Inc."
    },
    {
     "rank": 39,
@@ -1091,7 +1179,8 @@
     "buy": 52212678.0,
     "sell": 26729343.0,
     "net": 25483335.0,
-    "ticker": "QQQI"
+    "ticker": "QQQI",
+    "display_name": "NEOS Nasdaq 100 High Income ETF"
    },
    {
     "rank": 40,
@@ -1104,7 +1193,8 @@
     "buy": 70389893.0,
     "sell": 45399454.0,
     "net": 24990438.0,
-    "ticker": "RKLB"
+    "ticker": "RKLB",
+    "display_name": "Rocket Lab Corporation"
    },
    {
     "rank": 41,
@@ -1116,7 +1206,8 @@
     "buy": 31349807.0,
     "sell": 7335065.0,
     "net": 24014743.0,
-    "ticker": "KO"
+    "ticker": "KO",
+    "display_name": "The Coca-Cola Company"
    },
    {
     "rank": 42,
@@ -1128,7 +1219,8 @@
     "buy": 29653626.0,
     "sell": 5883249.0,
     "net": 23770378.0,
-    "ticker": "JEPI"
+    "ticker": "JEPI",
+    "display_name": "JPMorgan Equity Premium Income ETF"
    },
    {
     "rank": 43,
@@ -1140,7 +1232,8 @@
     "buy": 29470836.0,
     "sell": 5769473.0,
     "net": 23701363.0,
-    "ticker": "JOBY"
+    "ticker": "JOBY",
+    "display_name": "Joby Aviation, Inc."
    },
    {
     "rank": 44,
@@ -1152,7 +1245,8 @@
     "buy": 29283056.0,
     "sell": 5726236.0,
     "net": 23556820.0,
-    "ticker": "OKTA"
+    "ticker": "OKTA",
+    "display_name": "Okta, Inc."
    },
    {
     "rank": 45,
@@ -1164,7 +1258,8 @@
     "buy": 33257090.0,
     "sell": 11923655.0,
     "net": 21333435.0,
-    "ticker": "WMT"
+    "ticker": "WMT",
+    "display_name": "Walmart Inc."
    },
    {
     "rank": 46,
@@ -1176,7 +1271,8 @@
     "buy": 27567413.0,
     "sell": 8349547.0,
     "net": 19217865.0,
-    "ticker": "NKE"
+    "ticker": "NKE",
+    "display_name": "NIKE, Inc."
    },
    {
     "rank": 47,
@@ -1188,7 +1284,8 @@
     "buy": 23295646.0,
     "sell": 4483061.0,
     "net": 18812584.0,
-    "ticker": "FSLR"
+    "ticker": "FSLR",
+    "display_name": "First Solar, Inc."
    },
    {
     "rank": 48,
@@ -1200,7 +1297,8 @@
     "buy": 21415163.0,
     "sell": 2891862.0,
     "net": 18523301.0,
-    "ticker": "GPIQ"
+    "ticker": "GPIQ",
+    "display_name": "Goldman Sachs Nasdaq-100 Premium Income ETF"
    },
    {
     "rank": 49,
@@ -1213,7 +1311,8 @@
     "buy": 39665371.0,
     "sell": 21887512.0,
     "net": 17777859.0,
-    "ticker": "ASST"
+    "ticker": "ASST",
+    "display_name": "Strive, Inc."
    },
    {
     "rank": 50,
@@ -1226,7 +1325,8 @@
     "buy": 47714937.0,
     "sell": 30014539.0,
     "net": 17700398.0,
-    "ticker": "SCO"
+    "ticker": "SCO",
+    "display_name": "ProShares UltraShort Bloomberg Crude Oil"
    }
   ]
  }
