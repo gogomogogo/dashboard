@@ -364,7 +364,7 @@ def _translate_google(texts: list) -> dict:
     return {k: v for d in parts for k, v in d.items()}
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def _translation_store() -> dict:
     """헤드라인 한 건 단위 번역 저장소 (앱 전체가 공유). 이미 번역한 문장은 다시 요청하지 않는다."""
     return {"ko": {}, "engine": None}

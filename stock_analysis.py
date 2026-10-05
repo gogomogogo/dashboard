@@ -4,7 +4,9 @@ import streamlit as st
 
 import charts
 import data
-from common import embed_html
+from common import embed_html, show_timings, start_timings, timed
+
+start_timings()
 
 INDICATORS = ["거래량", "이동평균선", "볼린저밴드", "RSI", "MACD"]
 INTERVALS = {"일봉": "1d", "주봉": "1wk", "월봉": "1mo"}
@@ -68,11 +70,20 @@ with st.sidebar:
 
 # ---------------------------------------------------------------- 차트
 with st.spinner(f"{ticker} 데이터를 불러오는 중"):
-    hist = data.get_history(ticker, interval)
-    info = data.get_info(ticker)
+    try:
+        hist = timed("시세", lambda: data.get_history(ticker, interval), 40)
+    except Exception as e:
+        st.error(f"시세를 불러오지 못했습니다: {e}")
+        show_timings()
+        st.stop()
+    try:
+        info = timed("기본 지표", lambda: data.get_info(ticker), 40)
+    except Exception:
+        info = {}
 
 if hist.empty:
     st.error(f"'{ticker}' 시세를 찾을 수 없습니다. 티커 철자를 확인해 주세요. (예: 버크셔해서웨이 B주는 BRK-B)")
+    show_timings()
     st.stop()
 
 name = info.get("longName") or info.get("shortName") or ticker
@@ -136,7 +147,10 @@ if info.get("_sources"):
 
 # ---------------------------------------------------------------- 뉴스
 st.subheader("최근 뉴스")
-news = data.get_news(ticker)
+try:
+    news = timed("뉴스", lambda: data.get_news(ticker), 30)
+except Exception:
+    news = []
 if not news:
     st.caption("표시할 뉴스가 없습니다.")
 for n in news:
@@ -145,3 +159,5 @@ for n in news:
     title = f"[{clean}]({n['url']})" if n["url"] else clean
     meta = " | ".join(x for x in (n["source"], when) if x)
     st.markdown(f"**{title}**  \n:gray[{meta}]")
+
+show_timings()

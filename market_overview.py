@@ -7,7 +7,9 @@ import streamlit as st
 import charts
 import data
 import news
-from common import embed_html
+from common import embed_html, show_timings, start_timings, timed
+
+start_timings()
 
 VIEWS = ["원본", "1차 미분", "2차 미분"]
 
@@ -53,7 +55,7 @@ def indicator_panel(key, title, loader, color, unit="", decimals=2):
     """지표 하나: 제목 + 현재값 + 보기 전환 + 선 차트."""
     with st.container(border=True):
         try:
-            s, note = loader()
+            s, note = timed(title, loader, 40)
         except Exception as e:
             st.subheader(title)
             st.error(f"데이터를 불러오지 못했습니다: {e}")
@@ -95,10 +97,13 @@ st.caption(f"마지막 갱신 {datetime.now():%Y-%m-%d %H:%M}")
 st.subheader("S&P 500 히트맵")
 try:
     with st.spinner("S&P 500 종목 데이터를 불러오는 중입니다. 처음 한 번은 1~2분 걸릴 수 있습니다."):
-        cons = data.get_sp500_constituents()
-        tickers = tuple(cons["ticker"])
-        caps = data.get_market_caps(tickers)
-        closes = data.get_closes(tickers)
+        def _load_heatmap():
+            c = data.get_sp500_constituents()
+            t = tuple(c["ticker"])
+            return c, data.get_market_caps(t), data.get_closes(t)
+
+        # 시가총액은 처음 한 번 500종목을 조회하느라 오래 걸릴 수 있어 넉넉히 기다린다
+        cons, caps, closes = timed("S&P 500 히트맵", _load_heatmap, 180)
     rets = data.compute_returns(closes, period)
     hm = cons.assign(
         market_cap=cons["ticker"].map(caps),
@@ -117,7 +122,7 @@ except Exception as e:
 # ---------------------------------------------------------------- 섹터 흐름
 st.subheader("섹터 흐름")
 try:
-    sec_close = data.get_sector_closes()
+    sec_close = timed("섹터 흐름", data.get_sector_closes, 40)
     h1, h2 = st.columns([3, 1], vertical_alignment="center")
     h1.caption("기준일 종가를 0%로 놓고 각 섹터 ETF가 얼마나 움직였는지 비교합니다. 굵은 선이 상위 3개 주도 섹터입니다.")
     span = h2.segmented_control("기간", ["1주", "1개월", "3개월"], default="1개월",
@@ -207,11 +212,12 @@ with issues_slot:
     try:
         with st.spinner("주요 매체 헤드라인을 모아 이슈별로 정리하는 중"):
             try:
-                cons_n = data.get_sp500_constituents()
-                caps_n = data.get_market_caps(tuple(cons_n["ticker"]))
+                cons_n = timed("종목 목록", data.get_sp500_constituents, 20)
+                caps_n = timed("시가총액", lambda: data.get_market_caps(tuple(cons_n["ticker"])), 30)
             except Exception:
                 cons_n, caps_n = pd.DataFrame({"ticker": [], "name": []}), pd.Series(dtype=float)
-            issues, engine, n_articles, n_outlets = news.top_issues(cons_n, caps_n, hours=news_hours)
+            issues, engine, n_articles, n_outlets = timed(
+                "주요 이슈", lambda: news.top_issues(cons_n, caps_n, hours=news_hours), 60)
         if not issues:
             st.info("가져온 헤드라인이 없습니다. 잠시 후 '데이터 새로고침'을 눌러 보세요.")
         else:
@@ -225,3 +231,5 @@ with issues_slot:
             st.caption(note)
     except Exception as e:
         st.error(f"주요 이슈를 불러오지 못했습니다: {e}")
+
+show_timings()

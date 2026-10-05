@@ -5,7 +5,9 @@ import streamlit as st
 
 import calendars as cal
 import data
-from common import embed_html, is_dark
+from common import embed_html, is_dark, show_timings, start_timings, timed
+
+start_timings()
 
 st.title("캘린더")
 
@@ -45,9 +47,10 @@ def in_week(items: dict) -> dict:
 if kind == "경제지표":
     try:
         with st.spinner("경제지표 일정을 불러오는 중"):
-            econ = data.get_economic_calendar(q_start, q_end)
+            econ = timed("경제지표 일정", lambda: data.get_economic_calendar(q_start, q_end), 60)
     except Exception as e:
         st.error(f"경제지표 일정을 불러오지 못했습니다: {e}")
+        show_timings()
         st.stop()
 
     regions = sorted(econ["region"].dropna().unique()) if not econ.empty else []
@@ -79,9 +82,10 @@ else:
 
     try:
         with st.spinner("실적발표 일정을 불러오는 중"):
-            earn = data.get_earnings_calendar(q_start, q_end, caps[cap_label])
+            earn = timed("실적발표 일정", lambda: data.get_earnings_calendar(q_start, q_end, caps[cap_label]), 60)
     except Exception as e:
         st.error(f"실적발표 일정을 불러오지 못했습니다: {e}")
+        show_timings()
         st.stop()
 
     if sp_only and not earn.empty:
@@ -98,3 +102,5 @@ else:
         "종목을 클릭하면 새 탭에서 종목 분석이 열립니다. "
         f"출처 {earn['source'].iloc[0] if not earn.empty else '-'}"
     )
+
+show_timings()
