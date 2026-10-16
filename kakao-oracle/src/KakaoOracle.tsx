@@ -2,7 +2,6 @@ import { loadFont } from "@remotion/fonts";
 import React from "react";
 import {
   AbsoluteFill,
-  Easing,
   interpolate,
   spring,
   staticFile,
@@ -23,10 +22,7 @@ const T = {
   msg1: 0.75, // 원숭이: 야야 오라클이...
   msg2: 3.2, // 나: 잉?? 포스메져?
   msg3: 6.0, // 원숭이: ㅇㅇBE 납품... (두번째 카톡!)
-  msg4: 9.0, // 나: 오키 한번 조사해봄
-  zoomIn: 11.0, // "그래서 조사해봤습니다" 시작 → 마지막 말풍선으로 줌인
-  whip: 12.2, // 줌 블러 + 플래시 전환
-  title: 12.6, // 조사 타이틀 화면 등장
+  msg4: 9.0, // 나: 오키 한번 조사해봄 (이후 16초까지 정지 화면)
 };
 
 const KAKAO_BG = "#B2C7DA";
@@ -55,51 +51,11 @@ export const KakaoOracle: React.FC = () => {
     [0, 0.55, 0],
     clamp,
   );
-  const phonePop = spring({
-    frame: frame - s(T.screenOn),
-    fps,
-    config: { damping: 14, stiffness: 160 },
-  });
-
-  // 카메라: 대화 중 천천히 푸시인 → 마지막 말풍선으로 줌인 → 휩 블러
-  const drift = interpolate(frame, [s(T.screenOn), s(T.zoomIn)], [1, 1.07], clamp);
-  const zoom = interpolate(frame, [s(T.zoomIn), s(T.whip)], [1, 2.3], {
-    ...clamp,
-    easing: Easing.bezier(0.65, 0, 0.35, 1),
-  });
-  const whipZoom = interpolate(frame, [s(T.whip), s(T.title) + 4], [1, 7], {
-    ...clamp,
-    easing: Easing.bezier(0.55, 0, 1, 0.45),
-  });
-  const whipBlur = interpolate(frame, [s(T.whip), s(T.title) + 4], [0, 28], clamp);
-  const chatOpacity = interpolate(frame, [s(T.title) - 2, s(T.title) + 6], [1, 0], clamp);
-
-  // 마지막 말풍선 위치 (컴포지션 좌표) — 푸시인/줌인 기준점
-  const focusX = 1092;
-  const focusY = 607;
-  const toCenter = interpolate(frame, [s(T.zoomIn), s(T.whip)], [0, 1], {
-    ...clamp,
-    easing: Easing.bezier(0.65, 0, 0.35, 1),
-  });
-
-  const flash = interpolate(
-    frame,
-    [s(T.title) - 4, s(T.title), s(T.title) + 7],
-    [0, 0.85, 0],
-    clamp,
-  );
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#000", fontFamily }}>
       {/* ── 채팅 화면 레이어 ── */}
-      <AbsoluteFill
-        style={{
-          opacity: chatOpacity,
-          filter: `blur(${whipBlur}px)`,
-          transformOrigin: `${focusX}px ${focusY}px`,
-          transform: `translate(${(960 - focusX) * toCenter}px, ${(540 - focusY) * toCenter}px) scale(${drift * zoom * whipZoom})`,
-        }}
-      >
+      <AbsoluteFill>
         {/* 화면 빛 번짐 */}
         <AbsoluteFill
           style={{
@@ -118,7 +74,6 @@ export const KakaoOracle: React.FC = () => {
               background: "linear-gradient(145deg, #2a2a2e, #0c0c0e 60%, #1c1c20)",
               boxShadow:
                 "0 0 0 2px #3a3a40, 0 40px 120px rgba(0,0,0,0.8), inset 0 0 0 2px #050505",
-              scale: String(0.94 + 0.06 * phonePop),
               position: "relative",
             }}
           >
@@ -161,12 +116,6 @@ export const KakaoOracle: React.FC = () => {
         </AbsoluteFill>
       </AbsoluteFill>
 
-      {/* ── 조사 타이틀 화면 ── */}
-      <InvestigateTitle start={s(T.title)} frame={frame} fps={fps} />
-
-      {/* 휩 전환 스트릭 + 플래시 */}
-      <WhipStreaks frame={frame} start={s(T.whip)} end={s(T.title) + 8} />
-      <AbsoluteFill style={{ backgroundColor: "#fff", opacity: flash }} />
     </AbsoluteFill>
   );
 };
@@ -468,200 +417,3 @@ const MenuIcon = () => (
     <line x1="4" y1="18" x2="20" y2="18" />
   </svg>
 );
-
-// ───────────────────────── 전환 효과 ─────────────────────────
-
-const WhipStreaks: React.FC<{ frame: number; start: number; end: number }> = ({
-  frame,
-  start,
-  end,
-}) => {
-  if (frame < start || frame > end) return null;
-  const p = (frame - start) / (end - start);
-  const intensity = Math.sin(p * Math.PI);
-  // 중심에서 바깥으로 뻗는 줌 스트릭
-  const rays = Array.from({ length: 36 }, (_, i) => {
-    const angle = (i / 36) * 360 + ((i * 47) % 13);
-    const len = 300 + ((i * 97) % 500);
-    const inner = 120 + p * 700 + ((i * 31) % 200);
-    return { angle, len, inner, w: 2 + (i % 3) * 2 };
-  });
-  return (
-    <AbsoluteFill style={{ opacity: intensity, mixBlendMode: "screen" }}>
-      {rays.map((r, i) => (
-        <div
-          key={i}
-          style={{
-            position: "absolute",
-            left: 960,
-            top: 540,
-            width: r.len,
-            height: r.w,
-            transformOrigin: "0 50%",
-            transform: `rotate(${r.angle}deg) translateX(${r.inner}px)`,
-            background:
-              i % 4 === 0
-                ? `linear-gradient(90deg, rgba(254,229,0,0), rgba(254,229,0,0.9))`
-                : `linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.85))`,
-            borderRadius: 4,
-          }}
-        />
-      ))}
-    </AbsoluteFill>
-  );
-};
-
-// ───────────────────────── 조사 타이틀 ─────────────────────────
-
-const InvestigateTitle: React.FC<{ start: number; frame: number; fps: number }> = ({
-  start,
-  frame,
-  fps,
-}) => {
-  if (frame < start - 2) return null;
-  const f = frame - start;
-
-  const enter = interpolate(f, [-2, 10], [0, 1], {
-    ...clamp,
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-  });
-  const glitch = interpolate(f, [0, 12], [16, 0], clamp);
-  const line1 = spring({ frame: f - 6, fps, config: { damping: 200 } });
-  const line2 = spring({ frame: f - 14, fps, config: { damping: 16, stiffness: 140 } });
-  const underline = interpolate(f, [24, 40], [0, 1], {
-    ...clamp,
-    easing: Easing.bezier(0.65, 0, 0.35, 1),
-  });
-
-  // 돋보기 스윕
-  const lensX = interpolate(f, [8, 60], [-260, 2180], {
-    ...clamp,
-    easing: Easing.bezier(0.45, 0, 0.25, 1),
-  });
-  const lensY = 540 + Math.sin(f / 9) * 40;
-  const gridShift = f * 0.6;
-
-  const titleText = (color: string, dx: number, blend?: boolean) => (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        transform: `translateX(${dx}px)`,
-        mixBlendMode: blend ? "screen" : undefined,
-        color,
-      }}
-    >
-      <div
-        style={{
-          fontSize: 64,
-          fontWeight: 500,
-          letterSpacing: 4,
-          opacity: line1,
-          transform: `translateY(${(1 - line1) * 30}px)`,
-          color: blend ? color : "rgba(255,255,255,0.75)",
-        }}
-      >
-        그래서
-      </div>
-      <div
-        style={{
-          position: "relative",
-          fontSize: 150,
-          fontWeight: 900,
-          letterSpacing: -2,
-          marginTop: 8,
-          opacity: Math.min(1, line2 * 1.4),
-          transform: `scale(${0.8 + 0.2 * line2})`,
-        }}
-      >
-        <span style={{ color: blend ? color : KAKAO_YELLOW }}>조사</span>
-        해봤습니다
-        {!blend ? (
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              bottom: -14,
-              height: 12,
-              width: `${underline * 100}%`,
-              backgroundColor: KAKAO_YELLOW,
-              borderRadius: 6,
-            }}
-          />
-        ) : null}
-      </div>
-    </div>
-  );
-
-  return (
-    <AbsoluteFill
-      style={{
-        opacity: enter,
-        transform: `scale(${1.35 - 0.35 * enter})`,
-        filter: `blur(${(1 - enter) * 18}px)`,
-        backgroundColor: "#07090F",
-        overflow: "hidden",
-      }}
-    >
-      {/* 그리드 */}
-      <AbsoluteFill
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(120,160,220,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(120,160,220,0.08) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-          backgroundPosition: `${gridShift}px ${gridShift}px`,
-        }}
-      />
-      <AbsoluteFill
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(30,50,90,0.45) 0%, rgba(7,9,15,0) 55%), radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.85) 100%)",
-        }}
-      />
-
-      {/* 글리치 RGB 분리 → 정렬 */}
-      {glitch > 0.5 ? (
-        <>
-          {titleText("rgba(255,40,80,0.8)", -glitch, true)}
-          {titleText("rgba(40,220,255,0.8)", glitch, true)}
-        </>
-      ) : null}
-      {titleText("#fff", 0)}
-
-      {/* 돋보기 */}
-      <div
-        style={{
-          position: "absolute",
-          left: lensX - 130,
-          top: lensY - 130,
-          width: 260,
-          height: 260,
-          borderRadius: "50%",
-          border: "10px solid rgba(255,255,255,0.9)",
-          background:
-            "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.28), rgba(255,255,255,0.04) 60%)",
-          backdropFilter: "brightness(1.6) contrast(1.1)",
-          boxShadow: "0 0 60px rgba(254,229,0,0.25)",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            left: 205,
-            top: 205,
-            width: 130,
-            height: 26,
-            borderRadius: 13,
-            backgroundColor: "rgba(255,255,255,0.9)",
-            transform: "rotate(45deg)",
-            transformOrigin: "0 50%",
-          }}
-        />
-      </div>
-    </AbsoluteFill>
-  );
-};
