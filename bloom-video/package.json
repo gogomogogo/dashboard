@@ -28,7 +28,8 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "render:all": "for i in 1 2 3 4 5 6 7; do remotion render Scene$i out/Scene$i.mp4 || exit 1; done && remotion render Main out/Main.mp4"
   },
   "allowScripts": {
     "esbuild": false

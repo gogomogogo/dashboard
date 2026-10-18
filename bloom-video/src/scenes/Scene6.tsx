@@ -36,7 +36,7 @@ export const Scene6: React.FC = () => {
   const headOpacity = interpolate(arrowP, [0.8, 1], [0, 1], { extrapolateLeft: "clamp" });
 
   return (
-    <SceneFrame>
+    <SceneFrame index={5}>
       {/* 상단: +37% (가장 큰 요소) + 보조 문구 */}
       <div
         style={{

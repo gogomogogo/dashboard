@@ -26,7 +26,7 @@ export const CountUp: React.FC<Props> = ({
   return (
     <span style={{ fontVariantNumeric: "tabular-nums" }}>
       {prefix}
-      {v.toFixed(decimals)}
+      {v.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}
       {suffix}
     </span>
   );

@@ -6,7 +6,7 @@ import { CIRCLES, DATA, TEXT, ratios } from "../data";
 export const Scene5: React.FC = () => {
   const t = CIRCLES.s5;
   return (
-    <SceneFrame>
+    <SceneFrame index={4}>
       <CircleCompare
         label={TEXT.scene5.label}
         bloomValue={DATA.revenue.bloom}

@@ -1,54 +1,12 @@
-# Remotion video
+# 블룸에너지는 뭐하는 회사인가 — 모션 그래픽
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Remotion(React + TypeScript), 1920×1080 · 30fps · 오디오 없음. 결과물은 `out/Scene1~7.mp4`, `out/Main.mp4`.
 
-Welcome to your Remotion project!
+## 숫자 바꾸고 다시 렌더하기
+1. `src/data.ts`의 `DATA`(시총·매출·장면 길이 등)를 고친다. 주가는 `python3 scripts/fetch_price.py` 또는 `python3 scripts/import_price.py <받은CSV>`로 `data/price.csv`를 갱신한다.
+2. `npm i` 후 `npx remotion studio`로 미리 본다 (선택).
+3. `npm run render:all` 로 장면별 MP4 7개와 Main MP4를 `out/`에 다시 만든다.
 
-## Commands
-
-**Install Dependencies**
-
-```console
-npm i --loglevel=error
-```
-
-**Start Preview**
-
-```console
-npm run dev
-```
-
-**Render video**
-
-```console
-npx remotion render
-```
-
-**Upgrade Remotion**
-
-```console
-npx remotion upgrade
-```
-
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+## 참고
+- 로고 원본은 `assets/`, 배경 제거본은 `python3 scripts/make_logos.py`로 `public/logos/`에 생성.
+- 브라우저 다운로드가 막힌 환경에서는 `REMOTION_BROWSER=<chrome-headless-shell 경로>`를 지정한다.
